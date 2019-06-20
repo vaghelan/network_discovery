@@ -1,10 +1,12 @@
-import json
+
 import threading
 import logging
 import socket
 
 import signal
 import time
+
+import config
 
 exit_me = False
 query_thread_exited = False
@@ -24,24 +26,6 @@ def is_peer_db_filled(peers_db):
 
     return True
 
-class config_read():
-
-    def __init__(self, config_file):
-        self.data = {}
-        with open(config_file) as json_file:
-            self.data = json.load(json_file)
-
-    def get_name(self):
-        return self.data['config']['name']
-
-    def get_ip(self):
-        return self.data['config']['ip']
-
-    def get_neighbors(self):
-        return (self.data['config']['neighbors']).split(",")
-
-    def get_port(self):
-        return self.data['config']['port']
 
 
 def query_client(config_obj, my_peer, peers_db):
@@ -52,12 +36,14 @@ def query_client(config_obj, my_peer, peers_db):
     while True:
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(5)
+            s.settimeout(1)
             s.connect((HOST, PORT))
             s.sendall(b'query:')
             data = s.recv(1024)
         except socket.timeout:
-            log_me("Connection Timed out for %s", my_peer)
+            log_me("Connection Timed out for %s".format(my_peer))
+            if exit_me:
+                return
             continue
 
     if my_peer in peers_db:
@@ -126,7 +112,7 @@ logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 signal.signal(signal.SIGINT, exit_gracefully)
 
 
-config_obj = config_read(("config.txt"))
+config_obj = config.config_read(("config.txt"))
 
 # start query server thread to answer our ID
 q = threading.Thread(target=query_server, args=(config_obj,))

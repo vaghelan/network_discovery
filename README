@@ -1,0 +1,36 @@
+Solution Description:
+
+First off all I think that this is more like "Network Identity Discovery" and not "Network Topology Discovery".
+Because we already know our peers so there is not discovery. All we need to do is to find identity of peers.
+
+Based on this premise and understanding :
+
+1. Designed config file structure as follows 
+    {
+        "config" : {
+        "name" : "A",
+        "ip" : "localhost",
+        "port" : 5001,
+        "neighbors" : "192.168.1.1,192.168.1.2"
+        }
+    }
+
+2. Write config module to read config
+
+3. There are two ways in typical network programming : Async and Sync.
+In Sync mode, it is mostly multi threaded which is good when we have few clients and server. But it does not scale.
+I am assuming that in this example there are not lot many peers.
+
+Async gives good performance and no overhead of thread synchronization.
+
+For this problem, I am going with Sync model. But I have done lot of Async programming.
+
+4. We need one server to server query for identity. So we need to start in the thread so we can work independentely from main thread.
+
+5. We need to start client for query so I start one thread for each peer.
+
+6. In main thread, I wait for all clients to finish their query and once we have the result we can display.
+I am not taking care of the condition if some peers are down. But I do not assume that they are up when program starts on a machine.
+So I have a retrial mechanism and that is very essential in network programming.
+
+

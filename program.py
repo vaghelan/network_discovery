@@ -34,23 +34,30 @@ def query_client(config_obj, my_peer, peers_db):
     HOST = my_peer  # The server's hostname or IP address
     PORT = config_obj.get_port()  # The port used by the server
 
+    log_me("Connecting to {}:{}".format(HOST, PORT))
+
     while True:
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(1)
+            s.settimeout(5)
             s.connect((HOST, PORT))
             s.sendall(b'query:')
             data = s.recv(1024)
+            break
         except socket.timeout:
             log_me("Connection Timed out for {}".format(my_peer))
             if exit_me:
                 return
             continue
+        except socket.error:
+            log_me ("Couldnt connect with the socket-server: {} {} ".format(HOST, PORT))
+            time.sleep(5)
+            continue
 
     if my_peer in peers_db:
         peers_db[my_peer] = data
 
-    print('Received', repr(data))
+    print('DEBUG: ', peers_db)
 
 def query_server(config_obj):
     global exit_me
@@ -63,11 +70,11 @@ def query_server(config_obj):
 
     # Bind the socket to the port
     server_address = (config_obj.get_ip(), config_obj.get_port())
-    msg = 'starting up on %s port %s' % server_address
+    msg = 'Starting query server up on %s port %s' % server_address
     log_me(msg)
     sock.bind(server_address)
 
-    sock.settimeout(1)
+    sock.settimeout(5)
 
     # Listen for incoming connections
     sock.listen(5)
@@ -78,29 +85,32 @@ def query_server(config_obj):
 
         try:
             connection, client_address = sock.accept()
+
+            log_me('connection from {}'.format(client_address))
+
+            # Receive the data in small chunks and retransmit it
+            while True:
+                    data = connection.recv(16)
+                    log_me('received "%s"' % data)
+                    if data:
+                        log_me('sending data back to the client {}'.format(config_obj.get_name()))
+                        connection.sendall(config_obj.get_name())
+
+                    else:
+                        log_me('no more data from '.format(client_address))
+
+                    connection.close()
+                    break
+
         except socket.timeout:
             if exit_me:
                 break
             else:
                 continue
 
-        try:
-            log_me('connection from', client_address)
-
-            # Receive the data in small chunks and retransmit it
-            while True:
-                data = connection.recv(16)
-                log_me('received "%s"' % data)
-                if data:
-                    log_me('sending data back to the client ', config_obj.get_name())
-                    connection.sendall(config_obj.get_name())
-                else:
-                    log_me('no more data from', client_address)
-                    break
-
-
         finally:
             # Clean up the connection
+            log_me('Cleanup the connection'.format(client_address))
             connection.close()
 
     query_thread_exited = True
@@ -134,11 +144,15 @@ while (is_peer_db_filled(peers_db) == False):
 
 result = []
 
+
 for i in peers_db:
     result.append(peers_db[i])
 
+result.append(config_obj.get_name())
+result.sort()
 # Final result sorted...
-print (config_obj.get_name() + " : " + result.sort())
+print (result)
+#print (config_obj.get_name() + " : " + ",".join(result.sort()))
 
 # keep serving other peers till program ended
 while (query_thread_exited == False):

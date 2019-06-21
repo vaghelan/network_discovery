@@ -1,8 +1,8 @@
 {
 "config" : {
 "name" : "A",
-"ip" : "localhost",
+"ip" : "127.0.0.1",
 "port" : 5001,
-"neighbors" : "192.168.1.1,192.168.1.2"
+"neighbors" : "127.0.0.2"
 }
 }

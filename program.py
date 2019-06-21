@@ -7,6 +7,7 @@ import signal
 import time
 
 import config
+import sys
 
 exit_me = False
 query_thread_exited = False
@@ -41,7 +42,7 @@ def query_client(config_obj, my_peer, peers_db):
             s.sendall(b'query:')
             data = s.recv(1024)
         except socket.timeout:
-            log_me("Connection Timed out for %s".format(my_peer))
+            log_me("Connection Timed out for {}".format(my_peer))
             if exit_me:
                 return
             continue
@@ -112,7 +113,7 @@ logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 signal.signal(signal.SIGINT, exit_gracefully)
 
 
-config_obj = config.config_read(("config.txt"))
+config_obj = config.config_read(sys.argv[1])
 
 # start query server thread to answer our ID
 q = threading.Thread(target=query_server, args=(config_obj,))

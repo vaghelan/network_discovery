@@ -81,7 +81,7 @@ def query_server(config_obj):
 
     while exit_me == False:
         # Wait for a connection
-        log_me('waiting for a connection')
+        #log_me('waiting for a connection')
 
         try:
             connection, client_address = sock.accept()

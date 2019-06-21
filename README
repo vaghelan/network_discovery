@@ -1,6 +1,6 @@
 Solution Description:
 
-First off all I think that this is more like "Network Identity Discovery" and not "Network Topology Discovery".
+First of all I think that this is more like "Network Identity Discovery" and not "Network Topology Discovery".
 Because we already know our peers so there is not discovery. All we need to do is to find identity of peers.
 
 Based on this premise and understanding :

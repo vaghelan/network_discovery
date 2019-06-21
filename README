@@ -1,9 +1,5 @@
 Solution Description:
 
-First of all I think that this is more like "Network Identity Discovery" and not "Network Topology Discovery".
-Because we already know our peers so there is not discovery. All we need to do is to find identity of peers.
-
-Based on this premise and understanding :
 
 1. Designed config file structure as follows 
     {
@@ -26,8 +22,9 @@ Async gives good performance and no overhead of thread synchronization.
 For this problem, I am going with Sync model. But I have done lot of Async programming.
 
 4. We need one server to server query for identity. So we need to start in the thread so we can work independentely from main thread.
+Server receives reply from the peer and keeps collecting its peers and put in set.
 
-5. We need to start client for query so I start one thread for each peer.
+5. We need to start client for query so I start one thread for each peer. If it connects then it sends its identity.
 
 6. In main thread, I wait for all clients to finish their query and once we have the result we can display.
 I am not taking care of the condition if some peers are down. But I do not assume that they are up when program starts on a machine.

@@ -42,8 +42,8 @@ def query_client(config_obj, my_peer):
             s.settimeout(5)
             s.connect((HOST, PORT))
             s.sendall(config_obj.get_name())
-            #data = s.recv(1024)
-            break
+            s.close()
+            return
         except socket.timeout:
             log_me("Connection Timed out for {}".format(my_peer))
             if exit_me:

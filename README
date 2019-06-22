@@ -33,13 +33,11 @@ A:
 
 Convergence :
 
-1. A node should stop sending to its peer when all his neighbors are found
-So in case of "A, above map should be reached before "A" decides to stop sending even if "B" and "C" are unresolved.
-"A" is fully resolved so it can stop after sending that once to its neighbors.
 
-2. A node should stop receiving when its state is resolved and we have key for each node in the topology tree and all members are
+A node should stop and print when its state is resolved and we have key for each node in the topology tree and all members are
 resolved.
-So e.g. in above example "A" should wait for information "C" and "D" and keep receiving
+So e.g. in above example "A" should wait for "B" and "C" to resolve and also receive information "C" and "D"
+
 So when A reached following state (where we have everything resolved at each entry and we have keys for all nodes
 A:
   {

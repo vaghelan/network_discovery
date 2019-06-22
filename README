@@ -1,35 +1,52 @@
-Solution Description:
+Modified and Simplified Algorithm:
 
 
-1. Designed config file structure as follows 
-    {
-        "config" : {
-        "name" : "A",
-        "ip" : "localhost",
-        "port" : 5001,
-        "neighbors" : "192.168.1.1,192.168.1.2"
-        }
-    }
+Let us say there are 5 nodes : A, B, C, D, E
+Topology :
+{
+A : [ B, C ]
+B : [ A, D ]
+C : [ A, D ]
+D : [ B, C ]
+E : [ D ]
+}
 
-2. Write config module to read config
+Each machine program initializes its view if topology with its neighbors in config
 
-3. There are two ways in typical network programming : Async and Sync.
-In Sync mode, it is mostly multi threaded which is good when we have few clients and server. But it does not scale.
-I am assuming that in this example there are not lot many peers.
+E.g. for A let us say its neighbors are B and C. It initializes as follows :
 
-Async gives good performance and no overhead of thread synchronization.
+A:
+  {
+    A: { nodes : [ unknown ], num : 2 } (number of neighbors in that in config which is known)
+    B: { nodes : [ unknown ], num : -1 } (-1 means unknown)
+    E: [ nodes : [ unknown ], num : -1 } (-1 means unknown)
+  }
 
-For this problem, I am going with Sync model. But I have done lot of Async programming.
+After B and C, connects it sends  their info it will fill in the info we can update
+A:
+  {
+    A: [ B, C ], 2 (resolved)
+    B: [ A ], 2 (1 left)
+    C: [ A ], 1 (1 left)
 
-4. We need one server to server query for identity. So we need to start in the thread so we can work independentely from main thread.
-Server receives reply from the peer and keeps collecting its peers and put in set.
+  }
 
-5. We need to start client for query so I start one thread for each peer. If it connects then it sends its identity.
+Convergence :
 
-6. In main thread, I wait for all clients to finish their query and once we have the result we can display.
-I am not taking care of the condition if some peers are down. But I do not assume that they are up when program starts on a machine.
-So I have a re-trial mechanism and that I think is very essential in network programming.
+1. A node should stop sending to its peer when all his neighbors are found
+So in case of "A, above map should be reached before "A" decides to stop sending even if "B" and "C" are unresolved.
+"A" is fully resolved so it can stop after sending that once to its neighbors.
 
-7. Also impleneted signal hadler to terminate the program.
+2. A node should stop receiving when its state is resolved and we have key for each node in the topology tree and all members are
+resolved.
+So e.g. in above example "A" should wait for information "C" and "D" and keep receiving
+So when A reached following state (where we have everything resolved at each entry and we have keys for all nodes
+A:
+  {
+    A: [ B, C ], 2
+    B: [ A, D ], 2
+    C: [ A, D ], 2
+    D:  [ B, C ], 2
+    E:  [ D ] , 1
 
-
+  }

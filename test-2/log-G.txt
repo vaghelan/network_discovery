@@ -1,0 +1,38 @@
+19:51:30: Thread G: starting
+19:51:30: Number of clients to be exited 1
+19:51:30: Starting query server up on 127.0.0.7 port 5001
+19:51:30: Connecting to 127.0.0.6:5001
+19:51:30: Connection to peer 127.0.0.6 successful!!!
+19:51:30: Sending {"state": {"G": {"nodes": [], "num": 1}}, "id": "G"}
+19:51:30: Network state pushed to peer 127.0.0.6 successful!!!
+19:51:32: connection from ('127.0.0.7', 53573)
+19:51:32: received "{"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A", "E"], "num": 3}, "E": {"nodes": ["C", "F", "D", "B"], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}, "G": {"nodes": [], "num": 1}, "F": {"nodes": ["G", "E"], "num": 2}}, "id": "F"}"
+19:51:32: Cleanup the connection on ('127.0.0.7', 53573)
+19:51:32: update_server thread G: exiting
+19:51:32: CONVERGENCE ACHIEVED!!!
+19:51:32: Some clients left to be exited 1
+19:51:33: Connection to peer 127.0.0.6 successful!!!
+19:51:33: Sending {"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A", "E"], "num": 3}, "E": {"nodes": ["C", "F", "D", "B"], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}, "G": {"nodes": ["F"], "num": 1}, "F": {"nodes": ["G", "E"], "num": 2}}, "id": "G"}
+19:51:33: Network state pushed to peer 127.0.0.6 successful!!!
+19:51:33: Exiting client for peer 127.0.0.6
+19:51:33: All clients exited !!
+19:51:33: ===================
+19:51:33: A : B,C,D
+
+19:51:33: C : A,B,E
+
+19:51:33: B : A,C,E
+
+19:51:33: E : B,C,D,F
+
+19:51:33: D : A,E
+
+19:51:33: G : F
+
+19:51:33: F : E,G
+
+19:51:33: ===================
+19:51:33: Program Terminating!!
+{'state': {u'A': {u'nodes': [u'B', u'C', u'D'], u'num': 3}, u'C': {u'nodes': [u'A', u'B', u'E'], u'num': 3}, u'B': {u'nodes': [u'C', u'A', u'E'], u'num': 3}, u'E': {u'nodes': [u'C', u'F', u'D', u'B'], u'num': 4}, u'D': {u'nodes': [u'E', u'A'], u'num': 2}, u'G': {'nodes': [u'F'], 'num': 1}, u'F': {u'nodes': [u'G', u'E'], u'num': 2}}, 'id': u'G'}
+Convergence achieved........
+{'state': {u'A': {u'nodes': [u'B', u'C', u'D'], u'num': 3}, u'C': {u'nodes': [u'A', u'B', u'E'], u'num': 3}, u'B': {u'nodes': [u'C', u'A', u'E'], u'num': 3}, u'E': {u'nodes': [u'C', u'F', u'D', u'B'], u'num': 4}, u'D': {u'nodes': [u'E', u'A'], u'num': 2}, u'G': {'nodes': [u'F'], 'num': 1}, u'F': {u'nodes': [u'G', u'E'], u'num': 2}}, 'id': u'G'}

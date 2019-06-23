@@ -1,0 +1,97 @@
+19:51:27: Thread D: starting
+19:51:27: Number of clients to be exited 2
+19:51:27: Connecting to 127.0.0.1:5001
+19:51:27: Starting query server up on 127.0.0.4 port 5001
+19:51:27: Connecting to  127.0.0.5:5001
+19:51:27: Connection to peer 127.0.0.1 successful!!!
+19:51:27: Sending {"state": {"D": {"nodes": [], "num": 2}}, "id": "D"}
+19:51:27: Couldnt connect with the socket-server:  127.0.0.5 5001 
+19:51:27: Network state pushed to peer 127.0.0.1 successful!!!
+19:51:27: Convergence reached False
+19:51:27: Last time False
+19:51:28: connection from ('127.0.0.4', 53549)
+19:51:28: received "{"state": {"E": {"nodes": [], "num": 4}}, "id": "E"}"
+19:51:28: Cleanup the connection on ('127.0.0.4', 53549)
+19:51:30: connection from ('127.0.0.4', 53556)
+19:51:30: received "{"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A"], "num": 3}, "E": {"nodes": [], "num": 4}, "D": {"nodes": [], "num": 2}}, "id": "A"}"
+19:51:30: Cleanup the connection on ('127.0.0.4', 53556)
+19:51:30: Connection to peer 127.0.0.1 successful!!!
+19:51:30: Sending {"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A"], "num": 3}, "E": {"nodes": [], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}}, "id": "D"}
+19:51:30: Connection to peer  127.0.0.5 successful!!!
+19:51:30: Network state pushed to peer 127.0.0.1 successful!!!
+19:51:30: Sending {"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A"], "num": 3}, "E": {"nodes": [], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}}, "id": "D"}
+19:51:30: Network state pushed to peer  127.0.0.5 successful!!!
+19:51:31: connection from ('127.0.0.4', 53566)
+19:51:31: received "{"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A", "E"], "num": 3}, "E": {"nodes": ["C", "F", "D", "B"], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}, "F": {"nodes": [], "num": 2}}, "id": "E"}"
+19:51:31: Cleanup the connection on ('127.0.0.4', 53566)
+19:51:33: connection from ('127.0.0.4', 53575)
+19:51:33: received "{"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A", "E"], "num": 3}, "E": {"nodes": ["C", "F", "D", "B"], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}, "F": {"nodes": [], "num": 2}}, "id": "A"}"
+19:51:33: Cleanup the connection on ('127.0.0.4', 53575)
+19:51:33: Connection to peer 127.0.0.1 successful!!!
+19:51:33: Sending {"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A", "E"], "num": 3}, "E": {"nodes": ["C", "F", "D", "B"], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}, "F": {"nodes": [], "num": 2}}, "id": "D"}
+19:51:33: Network state pushed to peer 127.0.0.1 successful!!!
+19:51:33: Connection to peer  127.0.0.5 successful!!!
+19:51:33: Sending {"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A", "E"], "num": 3}, "E": {"nodes": ["C", "F", "D", "B"], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}, "F": {"nodes": [], "num": 2}}, "id": "D"}
+19:51:33: Network state pushed to peer  127.0.0.5 successful!!!
+19:51:34: connection from ('127.0.0.4', 53584)
+19:51:34: received "{"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A", "E"], "num": 3}, "E": {"nodes": ["C", "F", "D", "B"], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}, "G": {"nodes": [], "num": 1}, "F": {"nodes": ["G", "E"], "num": 2}}, "id": "E"}"
+19:51:34: Cleanup the connection on ('127.0.0.4', 53584)
+19:51:36: connection from ('127.0.0.4', 53593)
+19:51:36: received "{"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A", "E"], "num": 3}, "E": {"nodes": ["C", "F", "D", "B"], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}, "G": {"nodes": [], "num": 1}, "F": {"nodes": ["G", "E"], "num": 2}}, "id": "A"}"
+19:51:36: Cleanup the connection on ('127.0.0.4', 53593)
+19:51:36: Connection to peer 127.0.0.1 successful!!!
+19:51:36: Sending {"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A", "E"], "num": 3}, "E": {"nodes": ["C", "F", "D", "B"], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}, "G": {"nodes": [], "num": 1}, "F": {"nodes": ["G", "E"], "num": 2}}, "id": "D"}
+19:51:36: Network state pushed to peer 127.0.0.1 successful!!!
+19:51:36: Couldnt connect with the socket-server:  127.0.0.5 5001 
+19:51:36: Convergence reached False
+19:51:36: Last time False
+19:51:37: connection from ('127.0.0.4', 53599)
+19:51:37: received "{"state": {"A": {"nodes": ["B", "C", "D"], "num": 3}, "C": {"nodes": ["A", "B", "E"], "num": 3}, "B": {"nodes": ["C", "A", "E"], "num": 3}, "E": {"nodes": ["C", "F", "D", "B"], "num": 4}, "D": {"nodes": ["E", "A"], "num": 2}, "G": {"nodes": ["F"], "num": 1}, "F": {"nodes": ["G", "E"], "num": 2}}, "id": "E"}"
+19:51:37: Cleanup the connection on ('127.0.0.4', 53599)
+19:51:37: update_server thread D: exiting
+19:51:38: CONVERGENCE ACHIEVED!!!
+19:51:38: Some clients left to be exited 2
+19:51:39: Couldnt connect with the socket-server: 127.0.0.1 5001 
+19:51:39: Convergence reached True
+19:51:39: Last time True
+19:51:39: Couldnt connect with the socket-server:  127.0.0.5 5001 
+19:51:39: Convergence reached True
+19:51:39: Last time True
+19:51:39: Some clients left to be exited 2
+19:51:40: Some clients left to be exited 2
+19:51:41: Some clients left to be exited 2
+19:51:42: Exiting client for peer 127.0.0.1
+19:51:42: Exiting client for peer  127.0.0.5
+19:51:42: All clients exited !!
+19:51:42: ===================
+19:51:42: A : B,C,D
+
+19:51:42: C : A,B,E
+
+19:51:42: B : A,C,E
+
+19:51:42: E : B,C,D,F
+
+19:51:42: D : A,E
+
+19:51:42: G : F
+
+19:51:42: F : E,G
+
+19:51:42: ===================
+19:51:42: Program Terminating!!
+{'state': {u'E': {u'nodes': [], u'num': 4}, u'D': {'nodes': [u'E'], 'num': 2}}, 'id': u'D'}
+Convergence not achieved........
+{'state': {u'A': {u'nodes': [u'B', u'C', u'D'], u'num': 3}, u'C': {u'nodes': [u'A', u'B', u'E'], u'num': 3}, u'B': {u'nodes': [u'C', u'A'], u'num': 3}, u'E': {u'nodes': [], u'num': 4}, u'D': {'nodes': [u'E', u'A'], 'num': 2}}, 'id': u'D'}
+Convergence not achieved........
+{'state': {u'A': {u'nodes': [u'B', u'C', u'D'], u'num': 3}, u'C': {u'nodes': [u'A', u'B', u'E'], u'num': 3}, u'B': {u'nodes': [u'C', u'A', u'E'], u'num': 3}, u'E': {u'nodes': [u'C', u'F', u'D', u'B'], u'num': 4}, u'D': {'nodes': [u'E', u'A'], 'num': 2}, u'F': {u'nodes': [], u'num': 2}}, 'id': u'D'}
+Convergence not achieved........
+{'state': {u'A': {u'nodes': [u'B', u'C', u'D'], u'num': 3}, u'C': {u'nodes': [u'A', u'B', u'E'], u'num': 3}, u'B': {u'nodes': [u'C', u'A', u'E'], u'num': 3}, u'E': {u'nodes': [u'C', u'F', u'D', u'B'], u'num': 4}, u'D': {'nodes': [u'E', u'A'], 'num': 2}, u'F': {u'nodes': [], u'num': 2}}, 'id': u'D'}
+Convergence not achieved........
+{'state': {u'A': {u'nodes': [u'B', u'C', u'D'], u'num': 3}, u'C': {u'nodes': [u'A', u'B', u'E'], u'num': 3}, u'B': {u'nodes': [u'C', u'A', u'E'], u'num': 3}, u'E': {u'nodes': [u'C', u'F', u'D', u'B'], u'num': 4}, u'D': {'nodes': [u'E', u'A'], 'num': 2}, u'G': {u'nodes': [], u'num': 1}, u'F': {u'nodes': [u'G', u'E'], u'num': 2}}, 'id': u'D'}
+Convergence not achieved........
+{'state': {u'A': {u'nodes': [u'B', u'C', u'D'], u'num': 3}, u'C': {u'nodes': [u'A', u'B', u'E'], u'num': 3}, u'B': {u'nodes': [u'C', u'A', u'E'], u'num': 3}, u'E': {u'nodes': [u'C', u'F', u'D', u'B'], u'num': 4}, u'D': {'nodes': [u'E', u'A'], 'num': 2}, u'G': {u'nodes': [], u'num': 1}, u'F': {u'nodes': [u'G', u'E'], u'num': 2}}, 'id': u'D'}
+Convergence not achieved........
+{'state': {u'A': {u'nodes': [u'B', u'C', u'D'], u'num': 3}, u'C': {u'nodes': [u'A', u'B', u'E'], u'num': 3}, u'B': {u'nodes': [u'C', u'A', u'E'], u'num': 3}, u'E': {u'nodes': [u'C', u'F', u'D', u'B'], u'num': 4}, u'D': {'nodes': [u'E', u'A'], 'num': 2}, u'G': {u'nodes': [u'F'], u'num': 1}, u'F': {u'nodes': [u'G', u'E'], u'num': 2}}, 'id': u'D'}
+Convergence achieved........
+{'state': {u'A': {u'nodes': [u'B', u'C', u'D'], u'num': 3}, u'C': {u'nodes': [u'A', u'B', u'E'], u'num': 3}, u'B': {u'nodes': [u'C', u'A', u'E'], u'num': 3}, u'E': {u'nodes': [u'C', u'F', u'D', u'B'], u'num': 4}, u'D': {'nodes': [u'E', u'A'], 'num': 2}, u'G': {u'nodes': [u'F'], u'num': 1}, u'F': {u'nodes': [u'G', u'E'], u'num': 2}}, 'id': u'D'}

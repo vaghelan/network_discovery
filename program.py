@@ -170,11 +170,14 @@ def decode_message(config_obj, data, network_state):
 
 def print_final_network(network_state, output_file):
 
+    log_me("===================")
     o = open(output_file, "w")
     for node in network_state["state"]:
         network_state["state"][node]["nodes"].sort()
-        o.write("{} : {}\n".format(node, ",".join(network_state["state"][node]["nodes"])))
-
+        s = "{} : {}\n".format(node, ",".join(network_state["state"][node]["nodes"]))
+        o.write(s)
+        log_me(s)
+    log_me("===================")
     o.close()
 
 def update_server(config_obj, network_state):
@@ -200,8 +203,6 @@ def update_server(config_obj, network_state):
     sock.listen(1024)
 
     while exit_me == False:
-        # Wait for a connection
-        #log_me('waiting for a connection')
 
         try:
             connection = None
@@ -280,9 +281,6 @@ print (network_state)
 while num_client_exited != 0:
     log_me("Some clients left to be exited {}".format(num_client_exited))
     time.sleep(1)
-
-#time.sleep(get_timeout()*2)
-#log_me ("Clients left to be exited {}".format( num_client_exited) )
 
 log_me ("All clients exited !!")
 

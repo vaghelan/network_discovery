@@ -8,9 +8,17 @@ import time
 
 import config
 import sys
+import json
+import copy
+from threading import Thread, Lock
+
+TIMEOUT = 3
 
 exit_me = False
 query_thread_exited = False
+convegence_reached = False
+
+mutex = Lock()
 
 def log_me(msg):
     logging.info(msg)
@@ -20,45 +28,160 @@ def exit_gracefully(sig, frame):
     log_me('You pressed Ctrl+C!')
     exit_me = True
 
-def is_peer_db_filled(peers_db):
-    for p in peers_db:
-        if peers_db[p] == None:
-            return False
+def get_timeout():
+    return 3
 
-    return True
+num_client_exited = 0
 
-my_peers = set()
+network_state = {}
 
-def query_client(config_obj, my_peer):
+def decrement_num_client_exited():
+    global mutex
+    global  num_client_exited
+
+    mutex.acquire()
+    try:
+        num_client_exited = num_client_exited - 1
+    finally:
+        mutex.release()
+
+def send_update_client(config_obj, my_peer, network_state):
+
+    global mutex
+    global convegence_reached
 
     HOST = my_peer  # The server's hostname or IP address
     PORT = config_obj.get_port()  # The port used by the server
 
     log_me("Connecting to {}:{}".format(HOST, PORT))
 
+
     while True:
+
+        last_time = False
+
+        if convegence_reached:
+            last_time = True
+
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(5)
+            s.settimeout(get_timeout())
             s.connect((HOST, PORT))
-            s.sendall(config_obj.get_name())
+            log_me("Connection to peer {} successful!!!".format(my_peer))
+
+            send_payload = {}
+            mutex.acquire()
+            try :
+                send_payload = json.dumps(network_state)
+            finally:
+                mutex.release()
+            log_me("Sending {}".format(send_payload))
+            s.sendall(send_payload)
+
+            log_me("Network state pushed to peer {} successful!!!".format(my_peer))
+
             s.close()
-            return
+            if last_time:
+                log_me("Exiting client for peer {}".format(my_peer))
+                decrement_num_client_exited()
+                return
+            time.sleep(get_timeout())
+            continue
         except socket.timeout:
             log_me("Connection Timed out for {}".format(my_peer))
             if exit_me:
+                break
+
+            if last_time:
+                log_me("Exiting client for peer {}".format(my_peer))
+                decrement_num_client_exited()
                 return
+
             continue
         except socket.error:
             log_me ("Couldnt connect with the socket-server: {} {} ".format(HOST, PORT))
-            time.sleep(5)
+            log_me("Convergence reached {}".format(convegence_reached))
+            log_me("Last time {}".format(last_time))
+            time.sleep(get_timeout())
             if exit_me:
+                break
+
+            if last_time:
+                log_me("Exiting client for peer {}".format(my_peer))
+                decrement_num_client_exited()
                 return
+
             continue
 
-def query_server(config_obj):
+
+
+def convergence_achieved(network_state):
+
+    for node in network_state["state"]:
+        for my_neighbor in network_state["state"][node]["nodes"]:
+            if my_neighbor not in network_state["state"]:
+                return False
+        if len(network_state["state"][node]["nodes"]) != network_state["state"][node]["num"]:
+            return False
+
+    return True
+
+def decode_message(config_obj, data, network_state):
+    global mutex
+    global convegence_reached
+
+
+    mutex.acquire()
+
+    try:
+        data_json_obj = json.loads(data)
+        id = data_json_obj['id']
+
+        # update my node state
+
+        if id not in network_state["state"][config_obj.get_name()]["nodes"]:
+            network_state["state"][config_obj.get_name()]["nodes"].append(id)
+
+        # update
+        for id in data_json_obj["state"]:
+            if id == config_obj.get_name():
+                continue
+
+            if id not in network_state["state"]:
+                network_state["state"][id] = {}
+                network_state["state"][id] = copy.deepcopy(data_json_obj["state"][id])
+                continue
+
+            for j in data_json_obj["state"][id]["nodes"]:
+                if j not in network_state["state"][id]["nodes"]:
+                    network_state["state"][id]["nodes"].append(j)
+
+
+        print (network_state)
+
+        if convergence_achieved(network_state):
+            print ("Convergence achieved........")
+            convegence_reached = True
+        else:
+            print("Convergence not achieved........")
+
+    finally:
+        mutex.release()
+
+def print_final_network(network_state, output_file):
+
+    o = open(output_file, "w")
+    for node in network_state["state"]:
+        network_state["state"][node]["nodes"].sort()
+        o.write("{} : {}\n".format(node, ",".join(network_state["state"][node]["nodes"])))
+
+    o.close()
+
+def update_server(config_obj, network_state):
+
     global exit_me
     global query_thread_exited
+
 
     logging.info("Thread %s: starting", config_obj.get_name())
 
@@ -71,7 +194,7 @@ def query_server(config_obj):
     log_me(msg)
     sock.bind(server_address)
 
-    sock.settimeout(5)
+    sock.settimeout(get_timeout())
 
     # Listen for incoming connections
     sock.listen(5)
@@ -86,19 +209,26 @@ def query_server(config_obj):
 
             log_me('connection from {}'.format(client_address))
 
-            data = connection.recv(16)
+            data = connection.recv(1024)
             log_me('received "%s"' % data)
             if data:
-                my_peers.add(data)
+                decode_message(config_obj, data, network_state)
             else:
                 log_me('no more data from '.format(client_address))
 
+            if convegence_reached:
+                break
 
         except socket.timeout:
             if exit_me:
                 break
-            else:
-                continue
+            continue
+
+        except socket.error:
+            time.sleep(get_timeout())
+            if exit_me:
+                return
+            continue
 
         finally:
             # Clean up the connection
@@ -108,7 +238,7 @@ def query_server(config_obj):
 
     sock.close()
     query_thread_exited = True
-    logging.info("Thread %s: exiting", config_obj.get_name())
+    logging.info("update_server thread %s: exiting", config_obj.get_name())
 
 
 format = "%(asctime)s: %(message)s"
@@ -120,20 +250,42 @@ signal.signal(signal.SIGINT, exit_gracefully)
 config_obj = config.config_read(sys.argv[1])
 
 # start query server thread to answer our ID
-q = threading.Thread(target=query_server, args=(config_obj,))
+q = threading.Thread(target=update_server, args=(config_obj, network_state))
 q.start()
 
+network_state["id"] = config_obj.get_name()
+network_state["state"] = {}
+network_state["state"][config_obj.get_name()] = { "nodes" : [], "num" : len(config_obj.get_neighbors())}
 
+
+num_client_exited = len(config_obj.get_neighbors())
+
+log_me("Number of clients to be exited {}".format(num_client_exited))
 for i in config_obj.get_neighbors():
-    # start query server thread to answer our ID
-    c = threading.Thread(target=query_client, args=(config_obj, i))
+    # start update state server thread to answer our ID
+    c = threading.Thread(target=send_update_client, args=(config_obj, i, network_state))
     c.start()
 
 
 # keep serving other peers till program ended
-while (query_thread_exited == False):
-    print(config_obj.get_name() + " : [ " + ",".join(my_peers) + " ]")
+while (convegence_reached == False):
     time.sleep(1)
 
+log_me ("CONVERGENCE ACHIEVED!!!")
+print (network_state)
+
+
+while num_client_exited != 0:
+    log_me("Some clients left to be exited {}".format(num_client_exited))
+    time.sleep(1)
+
+#time.sleep(get_timeout()*2)
+#log_me ("Clients left to be exited {}".format( num_client_exited) )
+
+log_me ("All clients exited !!")
+
+print_final_network(network_state, sys.argv[2])
+
 logging.info("Program Terminating!!")
+
 

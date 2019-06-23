@@ -194,10 +194,10 @@ def update_server(config_obj, network_state):
     log_me(msg)
     sock.bind(server_address)
 
-    sock.settimeout(get_timeout())
+    #sock.settimeout(get_timeout())
 
     # Listen for incoming connections
-    sock.listen(5)
+    sock.listen(1024)
 
     while exit_me == False:
         # Wait for a connection
@@ -220,11 +220,13 @@ def update_server(config_obj, network_state):
                 break
 
         except socket.timeout:
+            log_me("Socket connection timed out !! {}".format(client_address))
             if exit_me:
                 break
             continue
 
-        except socket.error:
+        except socket.error as msg:
+            log_me("Socket connection ERROR !! {} {}".format(client_address, msg))
             time.sleep(get_timeout())
             if exit_me:
                 return

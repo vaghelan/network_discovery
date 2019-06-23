@@ -5,4 +5,4 @@ E : [ B, C, D, F ]
 D : [ A, E ] 
 G : [ F ] 
 F : [ E, G ] 
-Total time taken for discovery: 7.03445291519 seconds
+Total time taken for discovery: 5.02336001396 seconds

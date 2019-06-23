@@ -41,13 +41,13 @@ def decrement_num_client_exited():
     finally:
         mutex.release()
 
-def send_update_client(config_obj, my_peer, network_state):
+def send_update_client(config_obj, my_peer, my_peer_port, network_state):
 
     global mutex
     global convegence_reached
 
     HOST = my_peer  # The server's hostname or IP address
-    PORT = config_obj.get_port()  # The port used by the server
+    PORT = int(my_peer_port)  # The port used by the server
 
     log_me("Connecting to {}:{}".format(HOST, PORT))
 
@@ -64,7 +64,7 @@ def send_update_client(config_obj, my_peer, network_state):
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.settimeout(get_timeout())
             s.connect((HOST, PORT))
-            log_me("Connection to peer {} successful!!!".format(my_peer))
+            log_me("Connection to peer {}:{} successful!!!".format(HOST, PORT))
 
             send_payload = {}
             mutex.acquire()
@@ -76,22 +76,22 @@ def send_update_client(config_obj, my_peer, network_state):
             log_me("Sending {}".format(send_payload))
             s.sendall(send_payload)
 
-            log_me("Network state pushed to peer {} successful!!!".format(my_peer))
+            log_me("Network state pushed to peer {}:{} successful!!!".format(HOST, PORT))
 
             s.close()
             if last_time:
-                log_me("Exiting client for peer {}".format(my_peer))
+                log_me("Exiting client for peer {}:{}".format(HOST, PORT))
                 decrement_num_client_exited()
                 return
             time.sleep(get_timeout())
             continue
         except socket.timeout:
-            log_me("Connection Timed out for {}".format(my_peer))
+            log_me("Connection Timed out for {}:{}".format(HOST, PORT))
             if exit_me:
                 break
 
             if last_time:
-                log_me("Exiting client for peer {}".format(my_peer))
+                log_me("Exiting client for peer {}:{}".format(HOST, PORT))
                 decrement_num_client_exited()
                 return
 
@@ -105,7 +105,7 @@ def send_update_client(config_obj, my_peer, network_state):
                 break
 
             if last_time:
-                log_me("Exiting client for peer {}".format(my_peer))
+                log_me("Exiting client for peer {}:{}".format(HOST, PORT))
                 decrement_num_client_exited()
                 return
 
@@ -268,9 +268,10 @@ network_state["state"][config_obj.get_name()] = { "nodes" : [], "num" : len(conf
 num_client_exited = len(config_obj.get_neighbors())
 
 log_me("Number of clients to be exited {}".format(num_client_exited))
-for i in config_obj.get_neighbors():
+for i, j in config_obj.get_neighbors():
     # start update state server thread to answer our ID
-    c = threading.Thread(target=send_update_client, args=(config_obj, i, network_state))
+    #log_me ("Starting clients on {} {}".format(i, j))
+    c = threading.Thread(target=send_update_client, args=(config_obj, i, j, network_state))
     c.start()
 
 

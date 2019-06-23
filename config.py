@@ -7,6 +7,15 @@ class config_read():
         with open(config_file) as json_file:
             self.data = json.load(json_file)
 
+        host_port_pairs = (self.data['config']['neighbors']).split(",")
+
+        self.neighbors = []
+        for hp in host_port_pairs:
+            hp_set = hp.split(":")
+            self.neighbors.append((hp_set[0], hp_set[1]))
+
+        #print (self.neighbors)
+
     def get_name(self):
         return self.data['config']['name']
 
@@ -14,7 +23,7 @@ class config_read():
         return self.data['config']['ip']
 
     def get_neighbors(self):
-        return (self.data['config']['neighbors']).split(",")
+        return self.neighbors
 
     def get_port(self):
         return self.data['config']['port']

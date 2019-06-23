@@ -3,4 +3,4 @@ C : [ A, D ]
 B : [ A, D ] 
 E : [ D ] 
 D : [ B, C, E ] 
-Total time taken for discovery: 5.01223087311 seconds
+Total time taken for discovery: 6.02494120598 seconds

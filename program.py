@@ -13,7 +13,6 @@ import copy
 from threading import Thread, Lock
 
 # global variables
-TIMEOUT = 3
 exit_me = False
 query_thread_exited = False
 convegence_reached = False
@@ -30,7 +29,7 @@ def exit_gracefully(sig, frame):
     exit_me = True
 
 def get_timeout():
-    return 3
+    return 1
 
 def decrement_num_client_exited():
     global mutex
@@ -62,6 +61,7 @@ def send_update_client(config_obj, my_peer, network_state):
 
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.settimeout(get_timeout())
             s.connect((HOST, PORT))
             log_me("Connection to peer {} successful!!!".format(my_peer))
@@ -72,6 +72,7 @@ def send_update_client(config_obj, my_peer, network_state):
                 send_payload = json.dumps(network_state)
             finally:
                 mutex.release()
+
             log_me("Sending {}".format(send_payload))
             s.sendall(send_payload)
 
@@ -110,6 +111,10 @@ def send_update_client(config_obj, my_peer, network_state):
 
             continue
 
+    log_me("...Exiting client for peer {}".format(my_peer))
+    decrement_num_client_exited()
+    return
+
 def check_convergence_achieved(network_state):
 
     for node in network_state["state"]:
@@ -136,7 +141,7 @@ def merge_network_state(config_obj, data, network_state):
         if id not in network_state["state"][config_obj.get_name()]["nodes"]:
             network_state["state"][config_obj.get_name()]["nodes"].append(id)
 
-        # update
+        # update other nodes in the network if there is information
         for id in data_json_obj["state"]:
             if id == config_obj.get_name():
                 continue
@@ -151,7 +156,7 @@ def merge_network_state(config_obj, data, network_state):
                     network_state["state"][id]["nodes"].append(j)
 
 
-        print (network_state)
+        #print (network_state)
 
         if check_convergence_achieved(network_state):
             log_me("Convergence achieved........")
@@ -189,6 +194,7 @@ def update_server(config_obj, network_state):
     server_address = (config_obj.get_ip(), config_obj.get_port())
     msg = 'Starting query server up on %s port %s' % server_address
     log_me(msg)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind(server_address)
 
     #sock.settimeout(get_timeout())
@@ -201,7 +207,7 @@ def update_server(config_obj, network_state):
         try:
             connection = None
             connection, client_address = sock.accept()
-
+            #connection.settimeout(get_timeout())
             log_me('connection from {}'.format(client_address))
 
             data = connection.recv(1024)
@@ -215,7 +221,7 @@ def update_server(config_obj, network_state):
                 break
 
         except socket.timeout:
-            log_me("Socket connection timed out !! {}".format(client_address))
+            log_me("Socket connection timed out !!")
             if exit_me:
                 break
             continue
@@ -241,8 +247,8 @@ def update_server(config_obj, network_state):
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 
+# register signak handler
 signal.signal(signal.SIGINT, exit_gracefully)
-
 
 config_obj = config.config_read(sys.argv[1])
 
@@ -265,21 +271,25 @@ for i in config_obj.get_neighbors():
 
 
 # keep serving other peers till program ended
-while (convegence_reached == False):
+while (convegence_reached == False and exit_me == False):
     time.sleep(1)
 
-log_me ("CONVERGENCE ACHIEVED!!!")
-print (network_state)
+if exit_me:
+    log_me("Program terminated by User!!")
+    #sys.exit(1)
+else:
+    log_me ("CONVERGENCE ACHIEVED!!!")
+#print (network_state)
 
 
 while num_client_exited != 0:
     log_me("Some clients left to be exited {}".format(num_client_exited))
     time.sleep(1)
 
-log_me ("All clients exited !!")
-
-print_final_network(network_state, sys.argv[2])
+if exit_me == False:
+    log_me ("All clients exited !!")
+    print_final_network(network_state, sys.argv[2])
 
 logging.info("Program Terminating!!")
 
-
+sys.exit(0)

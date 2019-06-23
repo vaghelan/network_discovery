@@ -10,7 +10,3 @@ python ../program.py config-C.txt result-C.txt >& log-C.txt &
 python ../program.py config-D.txt result-D.txt >& log-D.txt &
 #sleep 1
 python ../program.py config-E.txt result-E.txt >& log-E.txt &
-#sleep 1
-python ../program.py config-F.txt result-F.txt >& log-F.txt &
-#sleep 1
-python ../program.py config-G.txt result-G.txt >& log-G.txt &

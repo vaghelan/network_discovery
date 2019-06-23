@@ -167,15 +167,18 @@ def merge_network_state(config_obj, data, network_state):
     finally:
         mutex.release()
 
-def print_final_network(network_state, output_file):
+def print_final_network(network_state, output_file, total_time):
 
     log_me("===================")
     o = open(output_file, "w")
     for node in network_state["state"]:
         network_state["state"][node]["nodes"].sort()
-        s = "{} : {}\n".format(node, ",".join(network_state["state"][node]["nodes"]))
+        s = "{} : [ {} ] \n".format(node, ", ".join(network_state["state"][node]["nodes"]))
         o.write(s)
         log_me(s)
+    s = "Total time taken for discovery: {} seconds\n".format(total_time)
+    log_me(s)
+    o.write(s)
     log_me("===================")
     o.close()
 
@@ -243,6 +246,7 @@ def update_server(config_obj, network_state):
     query_thread_exited = True
     logging.info("update_server thread %s: exiting", config_obj.get_name())
 
+start_time = time.time()
 
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
@@ -288,7 +292,8 @@ while num_client_exited != 0:
 
 if exit_me == False:
     log_me ("All clients exited !!")
-    print_final_network(network_state, sys.argv[2])
+    total_time = (time.time() - start_time)
+    print_final_network(network_state, sys.argv[2], total_time)
 
 logging.info("Program Terminating!!")
 

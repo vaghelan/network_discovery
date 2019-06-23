@@ -12,13 +12,14 @@ import json
 import copy
 from threading import Thread, Lock
 
+# global variables
 TIMEOUT = 3
-
 exit_me = False
 query_thread_exited = False
 convegence_reached = False
-
 mutex = Lock()
+num_client_exited = 0
+network_state = {}
 
 def log_me(msg):
     logging.info(msg)
@@ -30,10 +31,6 @@ def exit_gracefully(sig, frame):
 
 def get_timeout():
     return 3
-
-num_client_exited = 0
-
-network_state = {}
 
 def decrement_num_client_exited():
     global mutex
@@ -113,9 +110,7 @@ def send_update_client(config_obj, my_peer, network_state):
 
             continue
 
-
-
-def convergence_achieved(network_state):
+def check_convergence_achieved(network_state):
 
     for node in network_state["state"]:
         for my_neighbor in network_state["state"][node]["nodes"]:
@@ -126,10 +121,9 @@ def convergence_achieved(network_state):
 
     return True
 
-def decode_message(config_obj, data, network_state):
+def merge_network_state(config_obj, data, network_state):
     global mutex
     global convegence_reached
-
 
     mutex.acquire()
 
@@ -159,11 +153,11 @@ def decode_message(config_obj, data, network_state):
 
         print (network_state)
 
-        if convergence_achieved(network_state):
-            print ("Convergence achieved........")
+        if check_convergence_achieved(network_state):
+            log_me("Convergence achieved........")
             convegence_reached = True
         else:
-            print("Convergence not achieved........")
+            log_me("Convergence not achieved........")
 
     finally:
         mutex.release()
@@ -213,7 +207,7 @@ def update_server(config_obj, network_state):
             data = connection.recv(1024)
             log_me('received "%s"' % data)
             if data:
-                decode_message(config_obj, data, network_state)
+                merge_network_state(config_obj, data, network_state)
             else:
                 log_me('no more data from '.format(client_address))
 

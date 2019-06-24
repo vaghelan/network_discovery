@@ -51,18 +51,19 @@ def send_update_client(config_obj, my_peer, my_peer_port, network_state):
 
     log_me("Connecting to {}:{}".format(HOST, PORT))
 
+    last_time = False
 
     while True:
-
-        last_time = False
 
         if convegence_reached:
             last_time = True
 
         try:
+
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.settimeout(get_timeout())
+            s.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
             s.connect((HOST, PORT))
             log_me("Connection to peer {}:{} successful!!!".format(HOST, PORT))
 
@@ -78,40 +79,44 @@ def send_update_client(config_obj, my_peer, my_peer_port, network_state):
 
             log_me("Network state pushed to peer {}:{} successful!!!".format(HOST, PORT))
 
+
             s.close()
             if last_time:
-                log_me("Exiting client for peer {}:{}".format(HOST, PORT))
-                decrement_num_client_exited()
-                return
+                #log_me("Exiting client for peer {}:{}".format(HOST, PORT))
+                #decrement_num_client_exited()
+                #return
+                break
             time.sleep(get_timeout())
             continue
         except socket.timeout:
             log_me("Connection Timed out for {}:{}".format(HOST, PORT))
+            s.close()
             if exit_me:
                 break
 
             if last_time:
-                log_me("Exiting client for peer {}:{}".format(HOST, PORT))
-                decrement_num_client_exited()
-                return
-
+                #log_me("Exiting client for peer {}:{}".format(HOST, PORT))
+                #decrement_num_client_exited()
+                #return
+                break
             continue
         except socket.error:
             log_me ("Couldnt connect with the socket-server: {} {} ".format(HOST, PORT))
             log_me("Convergence reached {}".format(convegence_reached))
             log_me("Last time {}".format(last_time))
+            s.close()
             time.sleep(get_timeout())
             if exit_me:
                 break
 
             if last_time:
-                log_me("Exiting client for peer {}:{}".format(HOST, PORT))
-                decrement_num_client_exited()
-                return
-
+                #log_me("Exiting client for peer {}:{}".format(HOST, PORT))
+                #decrement_num_client_exited()
+                #return
+                break
             continue
 
-    log_me("...Exiting client for peer {}".format(my_peer))
+    log_me("Exiting client for peer {}".format(my_peer))
     decrement_num_client_exited()
     return
 
@@ -159,10 +164,10 @@ def merge_network_state(config_obj, data, network_state):
         #print (network_state)
 
         if check_convergence_achieved(network_state):
-            log_me("Convergence achieved........")
+            log_me("CONVERGENCE ACHIEVED........")
             convegence_reached = True
         else:
-            log_me("Convergence not achieved........")
+            log_me("CONVERGENCE NOT achieved........")
 
     finally:
         mutex.release()
@@ -199,7 +204,7 @@ def update_server(config_obj, network_state):
     log_me(msg)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind(server_address)
-
+    sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
     #sock.settimeout(get_timeout())
 
     # Listen for incoming connections
@@ -212,6 +217,7 @@ def update_server(config_obj, network_state):
             connection, client_address = sock.accept()
             #connection.settimeout(get_timeout())
             log_me('connection from {}'.format(client_address))
+            connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 
             data = connection.recv(1024)
             log_me('received "%s"' % data)

@@ -1,4 +1,3 @@
-
 import threading
 import logging
 import socket
@@ -13,7 +12,6 @@ import copy
 from threading import Thread, Lock
 import asyncio
 
-
 # global variables
 exit_me = False
 query_thread_exited = False
@@ -23,8 +21,10 @@ num_client_exited = 0
 network_state = {}
 network_state_version = 1
 
+
 def log_me(msg):
     logging.info(msg)
+
 
 def exit_gracefully(sig, frame):
     global exit_me
@@ -43,7 +43,7 @@ async def update_async_client(address, port, loop):
     my_network_state_version = -1
     while not done and not exit_me:
 
-        try :
+        try:
             log_me("Client : Making connection on {}:{}".format(address, port))
             reader, writer = await asyncio.open_connection(address, port,
                                                            loop=loop)
@@ -51,7 +51,7 @@ async def update_async_client(address, port, loop):
             while not exit_me:
 
                 if convergence_achieved:
-                    done = True 
+                    done = True
 
                 if my_network_state_version != network_state_version:
                     send_payload = json.dumps(network_state)
@@ -81,17 +81,16 @@ async def update_async_client(address, port, loop):
                     log_me("Client: CONVERGENCE achieved in client {}:{}".format(address, port))
                     break
 
-                #log_me("Client: Waiting for 1 sec with success {}:{}".format(address, port))
-                #await asyncio.sleep(1)
+                    # log_me("Client: Waiting for 1 sec with success {}:{}".format(address, port))
+                    # await asyncio.sleep(1)
         except Exception as ex:
             log_me("Error = {}".format(ex))
             log_me("Client: Waiting for server {}:{}".format(address, port))
             await asyncio.sleep(1)
 
-
-
     log_me('Client : Close socket')
     writer.close()
+
 
 async def update_async_server(reader, writer):
     global exit_me
@@ -104,7 +103,6 @@ async def update_async_server(reader, writer):
 
     addr = writer.get_extra_info('peername')
     log_me("Server Started for {}".format(addr))
-
 
     while not exit_me:
         try:
@@ -126,9 +124,9 @@ async def update_async_server(reader, writer):
             if convergence_achieved:
                 break
 
-            #print("Server : Send: %r" % message)
-            #writer.write(data)
-            #await writer.drain()
+                # print("Server : Send: %r" % message)
+                # writer.write(data)
+                # await writer.drain()
         except:
             log_me("Server: Client connection failed {}".format(addr))
             break
@@ -136,8 +134,8 @@ async def update_async_server(reader, writer):
     log_me("Server : Close socket for a client {}".format(addr))
     writer.close()
 
-def check_convergence_achieved(network_state):
 
+def check_convergence_achieved(network_state):
     for node in network_state["state"]:
         for my_neighbor in network_state["state"][node]["nodes"]:
             if my_neighbor not in network_state["state"]:
@@ -147,16 +145,17 @@ def check_convergence_achieved(network_state):
 
     return True
 
-def merge_network_state(config_obj, data, network_state):
-    #global mutex
-    global convergence_achieved
-    global  network_state_version
 
-    #mutex.acquire()
+def merge_network_state(config_obj, data, network_state):
+    # global mutex
+    global convergence_achieved
+    global network_state_version
+
+    # mutex.acquire()
 
     dirty = False
 
-    #try:
+    # try:
     data_json_obj = json.loads(data)
     id = data_json_obj['id']
 
@@ -182,8 +181,7 @@ def merge_network_state(config_obj, data, network_state):
                 network_state["state"][id]["nodes"].append(j)
                 dirty = True
 
-
-    #print (network_state)
+    # print (network_state)
 
     if check_convergence_achieved(network_state):
         log_me("CONVERGENCE ACHIEVED........")
@@ -195,11 +193,11 @@ def merge_network_state(config_obj, data, network_state):
         network_state_version += 1
 
     return dirty
-    #finally:
+    # finally:
     #    mutex.release()
 
-def print_final_network(network_state, output_file, total_time):
 
+def print_final_network(network_state, output_file, total_time):
     log_me("===================")
     o = open(output_file, "w")
     for node in network_state["state"]:
@@ -213,6 +211,7 @@ def print_final_network(network_state, output_file, total_time):
     log_me("===================")
     o.close()
 
+
 start_time = time.time()
 
 format = "%(asctime)s: %(message)s"
@@ -225,7 +224,7 @@ config_obj = config.config_read(sys.argv[1])
 
 network_state["id"] = config_obj.get_name()
 network_state["state"] = {}
-network_state["state"][config_obj.get_name()] = { "nodes" : [], "num" : len(config_obj.get_neighbors())}
+network_state["state"][config_obj.get_name()] = {"nodes": [], "num": len(config_obj.get_neighbors())}
 
 # start query server thread to answer our ID
 loop = asyncio.get_event_loop()
@@ -245,10 +244,10 @@ loop.run_until_complete(asyncio.gather(asyncio.wait(futures)))
 if exit_me:
     log_me("Program terminated by User!!")
 else:
-    log_me ("CONVERGENCE ACHIEVED!!!")
+    log_me("CONVERGENCE ACHIEVED!!!")
 
 if exit_me == False:
-    log_me ("All clients exited !!")
+    log_me("All clients exited !!")
     total_time = (time.time() - start_time)
     print_final_network(network_state, sys.argv[2], total_time)
 

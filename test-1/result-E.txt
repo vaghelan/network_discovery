@@ -1,6 +1,6 @@
-D : [ B, C, E ] 
-A : [ B, C ] 
-B : [ A, D ] 
 E : [ D ] 
 C : [ A, D ] 
-Total time taken for discovery: 1.2108700275421143 seconds
+A : [ B, C ] 
+B : [ A, D ] 
+D : [ B, C, E ] 
+Total time taken for discovery: 1.0283808708190918 seconds

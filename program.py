@@ -11,14 +11,17 @@ import sys
 import json
 import copy
 from threading import Thread, Lock
+import asyncio
+
 
 # global variables
 exit_me = False
 query_thread_exited = False
-convegence_reached = False
+convergence_achieved = False
 mutex = Lock()
 num_client_exited = 0
 network_state = {}
+network_state_version = 1
 
 def log_me(msg):
     logging.info(msg)
@@ -28,97 +31,110 @@ def exit_gracefully(sig, frame):
     log_me('You pressed Ctrl+C!')
     exit_me = True
 
-def get_timeout():
-    return 1
 
-def decrement_num_client_exited():
-    global mutex
-    global  num_client_exited
+async def update_async_client(address, port, loop):
+    global exit_me
+    global convergence_achieved
+    global network_state
+    global network_state_version
 
-    mutex.acquire()
-    try:
-        num_client_exited = num_client_exited - 1
-    finally:
-        mutex.release()
+    done = False
 
-def send_update_client(config_obj, my_peer, my_peer_port, network_state):
+    my_network_state_version = -1
+    while not done and not exit_me:
 
-    global mutex
-    global convegence_reached
+        try :
+            log_me("Client : Making connection on {}:{}".format(address, port))
+            reader, writer = await asyncio.open_connection(address, port,
+                                                           loop=loop)
 
-    HOST = my_peer  # The server's hostname or IP address
-    PORT = int(my_peer_port)  # The port used by the server
+            while not exit_me:
 
-    log_me("Connecting to {}:{}".format(HOST, PORT))
+                if convergence_achieved:
+                    done = True 
 
-    last_time = False
+                if my_network_state_version != network_state_version:
+                    send_payload = json.dumps(network_state)
+                else:
+                    log_me("Client : Nothing has changed in network state {}:{}".format(address, port))
+                    if done:
+                        log_me("Client: CONVERGENCE achieved in client {}:{}".format(address, port))
+                        break
+                    await asyncio.sleep(1)
+                    continue
 
-    while True:
+                log_me('Client: Send: %r' % send_payload)
+                try:
+                    writer.write(send_payload.encode())
+                    await writer.drain()
+                except Exception as ex:
+                    if not done:
+                        log_me("Client : Write Failed {}:{}".format(address, port))
+                        log_me("Client : Waiting for 1 sec after failure {}:{}".format(address, port))
+                        await asyncio.sleep(1)
+                        break
+                    pass
 
-        if convegence_reached:
-            last_time = True
+                my_network_state_version = network_state_version
 
+                if done:
+                    log_me("Client: CONVERGENCE achieved in client {}:{}".format(address, port))
+                    break
+
+                #log_me("Client: Waiting for 1 sec with success {}:{}".format(address, port))
+                #await asyncio.sleep(1)
+        except Exception as ex:
+            log_me("Error = {}".format(ex))
+            log_me("Client: Waiting for server {}:{}".format(address, port))
+            await asyncio.sleep(1)
+
+
+
+    log_me('Client : Close socket')
+    writer.close()
+
+async def update_async_server(reader, writer):
+    global exit_me
+    global convergence_achieved
+    global network_state
+
+    done = False
+
+    count = 0
+
+    addr = writer.get_extra_info('peername')
+    log_me("Server Started for {}".format(addr))
+
+
+    while not exit_me:
         try:
 
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            s.settimeout(get_timeout())
-            s.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-            s.connect((HOST, PORT))
-            log_me("Connection to peer {}:{} successful!!!".format(HOST, PORT))
+            data = await reader.read(1024)
+            message = data.decode()
 
-            send_payload = {}
-            mutex.acquire()
-            try :
-                send_payload = json.dumps(network_state)
-            finally:
-                mutex.release()
-
-            log_me("Sending {}".format(send_payload))
-            s.sendall(send_payload)
-
-            log_me("Network state pushed to peer {}:{} successful!!!".format(HOST, PORT))
-
-
-            s.close()
-            if last_time:
-                #log_me("Exiting client for peer {}:{}".format(HOST, PORT))
-                #decrement_num_client_exited()
-                #return
+            if message == '':
                 break
-            time.sleep(get_timeout())
-            continue
-        except socket.timeout:
-            log_me("Connection Timed out for {}:{}".format(HOST, PORT))
-            s.close()
-            if exit_me:
+            addr = writer.get_extra_info('peername')
+            log_me("Server : Received %r from %r" % (message, addr))
+
+            log_me('received "%s"' % message)
+            if data:
+                merge_network_state(config_obj, message, network_state)
+            else:
+                log_me('No more data from {}'.format(addr))
+
+            if convergence_achieved:
                 break
 
-            if last_time:
-                #log_me("Exiting client for peer {}:{}".format(HOST, PORT))
-                #decrement_num_client_exited()
-                #return
-                break
-            continue
-        except socket.error:
-            log_me ("Couldnt connect with the socket-server: {} {} ".format(HOST, PORT))
-            log_me("Convergence reached {}".format(convegence_reached))
-            log_me("Last time {}".format(last_time))
-            s.close()
-            time.sleep(get_timeout())
-            if exit_me:
-                break
+            #print("Server : Send: %r" % message)
+            #writer.write(data)
+            #await writer.drain()
+        except:
+            log_me("Server: Client connection failed {}".format(addr))
+            break
 
-            if last_time:
-                #log_me("Exiting client for peer {}:{}".format(HOST, PORT))
-                #decrement_num_client_exited()
-                #return
-                break
-            continue
-
-    log_me("Exiting client for peer {}".format(my_peer))
-    decrement_num_client_exited()
-    return
+    log_me("Server : Close socket for a client {}".format(addr))
+    writer.close()
 
 def check_convergence_achieved(network_state):
 
@@ -132,45 +148,55 @@ def check_convergence_achieved(network_state):
     return True
 
 def merge_network_state(config_obj, data, network_state):
-    global mutex
-    global convegence_reached
+    #global mutex
+    global convergence_achieved
+    global  network_state_version
 
-    mutex.acquire()
+    #mutex.acquire()
 
-    try:
-        data_json_obj = json.loads(data)
-        id = data_json_obj['id']
+    dirty = False
 
-        # update my node state
+    #try:
+    data_json_obj = json.loads(data)
+    id = data_json_obj['id']
 
-        if id not in network_state["state"][config_obj.get_name()]["nodes"]:
-            network_state["state"][config_obj.get_name()]["nodes"].append(id)
+    # update my node state
 
-        # update other nodes in the network if there is information
-        for id in data_json_obj["state"]:
-            if id == config_obj.get_name():
-                continue
+    if id not in network_state["state"][config_obj.get_name()]["nodes"]:
+        network_state["state"][config_obj.get_name()]["nodes"].append(id)
+        dirty = True
 
-            if id not in network_state["state"]:
-                network_state["state"][id] = {}
-                network_state["state"][id] = copy.deepcopy(data_json_obj["state"][id])
-                continue
+    # update other nodes in the network if there is information
+    for id in data_json_obj["state"]:
+        if id == config_obj.get_name():
+            continue
 
-            for j in data_json_obj["state"][id]["nodes"]:
-                if j not in network_state["state"][id]["nodes"]:
-                    network_state["state"][id]["nodes"].append(j)
+        if id not in network_state["state"]:
+            network_state["state"][id] = {}
+            network_state["state"][id] = copy.deepcopy(data_json_obj["state"][id])
+            dirty = True
+            continue
+
+        for j in data_json_obj["state"][id]["nodes"]:
+            if j not in network_state["state"][id]["nodes"]:
+                network_state["state"][id]["nodes"].append(j)
+                dirty = True
 
 
-        #print (network_state)
+    #print (network_state)
 
-        if check_convergence_achieved(network_state):
-            log_me("CONVERGENCE ACHIEVED........")
-            convegence_reached = True
-        else:
-            log_me("CONVERGENCE NOT achieved........")
+    if check_convergence_achieved(network_state):
+        log_me("CONVERGENCE ACHIEVED........")
+        convergence_achieved = True
+    else:
+        log_me("CONVERGENCE NOT achieved........")
 
-    finally:
-        mutex.release()
+    if dirty:
+        network_state_version += 1
+
+    return dirty
+    #finally:
+    #    mutex.release()
 
 def print_final_network(network_state, output_file, total_time):
 
@@ -187,115 +213,39 @@ def print_final_network(network_state, output_file, total_time):
     log_me("===================")
     o.close()
 
-def update_server(config_obj, network_state):
-
-    global exit_me
-    global query_thread_exited
-
-
-    logging.info("Thread %s: starting", config_obj.get_name())
-
-    # Create a TCP/IP socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    # Bind the socket to the port
-    server_address = (config_obj.get_ip(), config_obj.get_port())
-    msg = 'Starting query server up on %s port %s' % server_address
-    log_me(msg)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sock.bind(server_address)
-    sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-    #sock.settimeout(get_timeout())
-
-    # Listen for incoming connections
-    sock.listen(1024)
-
-    while exit_me == False:
-
-        try:
-            connection = None
-            connection, client_address = sock.accept()
-            #connection.settimeout(get_timeout())
-            log_me('connection from {}'.format(client_address))
-            connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-
-            data = connection.recv(1024)
-            log_me('received "%s"' % data)
-            if data:
-                merge_network_state(config_obj, data, network_state)
-            else:
-                log_me('no more data from '.format(client_address))
-
-            if convegence_reached:
-                break
-
-        except socket.timeout:
-            log_me("Socket connection timed out !!")
-            if exit_me:
-                break
-            continue
-
-        except socket.error as msg:
-            log_me("Socket connection ERROR !! {} {}".format(client_address, msg))
-            time.sleep(get_timeout())
-            if exit_me:
-                return
-            continue
-
-        finally:
-            # Clean up the connection
-            if connection != None:
-                log_me('Cleanup the connection on {}'.format(client_address))
-                connection.close()
-
-    sock.close()
-    query_thread_exited = True
-    logging.info("update_server thread %s: exiting", config_obj.get_name())
-
 start_time = time.time()
 
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 
-# register signak handler
+# register signal handler
 signal.signal(signal.SIGINT, exit_gracefully)
 
 config_obj = config.config_read(sys.argv[1])
-
-# start query server thread to answer our ID
-q = threading.Thread(target=update_server, args=(config_obj, network_state))
-q.start()
 
 network_state["id"] = config_obj.get_name()
 network_state["state"] = {}
 network_state["state"][config_obj.get_name()] = { "nodes" : [], "num" : len(config_obj.get_neighbors())}
 
+# start query server thread to answer our ID
+loop = asyncio.get_event_loop()
+coro = asyncio.start_server(update_async_server, config_obj.get_ip(), config_obj.get_port(), loop=loop)
+server = loop.run_until_complete(coro)
+log_me('Serving on {}'.format(server.sockets[0].getsockname()))
 
-num_client_exited = len(config_obj.get_neighbors())
+futures = []
 
-log_me("Number of clients to be exited {}".format(num_client_exited))
-for i, j in config_obj.get_neighbors():
-    # start update state server thread to answer our ID
-    #log_me ("Starting clients on {} {}".format(i, j))
-    c = threading.Thread(target=send_update_client, args=(config_obj, i, j, network_state))
-    c.start()
+for i in config_obj.get_neighbors():
+    (addr, port) = i
+    log_me(" addr = {}:{}".format(addr, port))
+    futures.append(update_async_client(addr, port, loop))
 
-
-# keep serving other peers till program ended
-while (convegence_reached == False and exit_me == False):
-    time.sleep(1)
+loop.run_until_complete(asyncio.gather(asyncio.wait(futures)))
 
 if exit_me:
     log_me("Program terminated by User!!")
-    #sys.exit(1)
 else:
     log_me ("CONVERGENCE ACHIEVED!!!")
-#print (network_state)
-
-
-while num_client_exited != 0:
-    log_me("Some clients left to be exited {}".format(num_client_exited))
-    time.sleep(1)
 
 if exit_me == False:
     log_me ("All clients exited !!")

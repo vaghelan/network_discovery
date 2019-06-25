@@ -12,9 +12,9 @@ class config_read():
         self.neighbors = []
         for hp in host_port_pairs:
             hp_set = hp.split(":")
-            self.neighbors.append((hp_set[0], hp_set[1]))
+            self.neighbors.append((hp_set[0].strip(), hp_set[1].strip()))
 
-        #print (self.neighbors)
+        print (self.neighbors)
 
     def get_name(self):
         return self.data['config']['name']

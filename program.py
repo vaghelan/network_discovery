@@ -60,7 +60,7 @@ async def update_async_client(address, port, loop):
                     if done:
                         log_me("Client: CONVERGENCE achieved in client {}:{}".format(address, port))
                         break
-                    await asyncio.sleep(0.05)
+                    await asyncio.sleep(0.01)
                     continue
 
                 log_me('Client: Send: %r' % send_payload)
@@ -71,7 +71,7 @@ async def update_async_client(address, port, loop):
                     if not done:
                         log_me("Client : Write Failed {}:{}".format(address, port))
                         log_me("Client : Waiting for 1 sec after failure {}:{}".format(address, port))
-                        await asyncio.sleep(0.05)
+                        await asyncio.sleep(0.01)
                         break
                     pass
 

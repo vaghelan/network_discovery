@@ -1,8 +1,8 @@
-D : [ A, E ] 
-F : [ E, G ] 
 C : [ A, B, E ] 
+B : [ A, C, E ] 
 G : [ F ] 
 A : [ B, C, D ] 
+F : [ E, G ] 
+D : [ A, E ] 
 E : [ B, C, D, F ] 
-B : [ A, C, E ] 
-Total time taken for discovery: 1.1090350151062012 seconds
+Total time taken for discovery: 1.0405068397521973 seconds

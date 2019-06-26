@@ -31,12 +31,14 @@ def exit_gracefully(sig, frame):
     log_me('You pressed Ctrl+C!')
     exit_me = True
 
+waiters = []
 
 async def update_async_client(address, port, loop):
     global exit_me
     global convergence_achieved
     global network_state
     global network_state_version
+    global waiters
 
     done = False
 
@@ -56,11 +58,16 @@ async def update_async_client(address, port, loop):
                 if my_network_state_version != network_state_version:
                     send_payload = json.dumps(network_state)
                 else:
-                    #log_me("Client : Nothing has changed in network state {}:{}".format(address, port))
+
                     if done:
                         log_me("Client: CONVERGENCE achieved in client {}:{}".format(address, port))
                         break
-                    await asyncio.sleep(0.01)
+
+                    fut = loop.create_future()
+                    waiters.append(fut)
+                    log_me("Client: Waiting on Future".format(address, port))
+                    await fut
+                    log_me("Client: Waiting on Future OVER!!".format(address, port))
                     continue
 
                 log_me('Client: Send: %r' % send_payload)
@@ -71,7 +78,7 @@ async def update_async_client(address, port, loop):
                     if not done:
                         log_me("Client : Write Failed {}:{}".format(address, port))
                         log_me("Client : Waiting for 1 sec after failure {}:{}".format(address, port))
-                        await asyncio.sleep(0.01)
+                        #await asyncio.sleep(0.01)
                         break
                     pass
 
@@ -83,19 +90,28 @@ async def update_async_client(address, port, loop):
 
                     # log_me("Client: Waiting for 1 sec with success {}:{}".format(address, port))
                     # await asyncio.sleep(1)
+
+            if done:
+                log_me("Client: CONVERGENCE achieved in client {}:{}".format(address, port))
+                break
+
         except Exception as ex:
             log_me("Error = {}".format(ex))
             log_me("Client: Waiting for server {}:{}".format(address, port))
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.01)
+
+
 
     log_me('Client : Close socket')
     writer.close()
+    return True
 
 
 async def update_async_server(reader, writer):
     global exit_me
     global convergence_achieved
     global network_state
+    global waiters
 
     done = False
 
@@ -116,8 +132,17 @@ async def update_async_server(reader, writer):
             log_me("Server : Received %r from %r" % (message, addr))
 
             log_me('received "%s"' % message)
+            result = False
             if data:
-                merge_network_state(config_obj, message, network_state)
+                result = merge_network_state(config_obj, message, network_state)
+
+                if result:
+                    for f in waiters:
+                        log_me("Server: Releasing the Waiter")
+                        f.set_result(True)
+                        waiters.remove(f)
+                else:
+                    log_me("Server: Nothing changed..{}.".format(waiters))
             else:
                 log_me('No more data from {}'.format(addr))
 
@@ -191,8 +216,9 @@ def merge_network_state(config_obj, data, network_state):
 
     if dirty:
         network_state_version += 1
+        log_me("Network STATE VERSION {}........".format(network_state_version))
 
-    return dirty
+    return True
     # finally:
     #    mutex.release()
 
@@ -240,6 +266,8 @@ for i in config_obj.get_neighbors():
     futures.append(update_async_client(addr, port, loop))
 
 loop.run_until_complete(asyncio.gather(asyncio.wait(futures)))
+
+log_me("WAIT COMPLETED>.....")
 
 if exit_me:
     log_me("Program terminated by User!!")

@@ -43,6 +43,7 @@ async def update_async_client(address, port, loop):
     done = False
 
     my_network_state_version = -1
+
     while not done and not exit_me:
 
         try:
@@ -65,9 +66,9 @@ async def update_async_client(address, port, loop):
 
                     fut = loop.create_future()
                     waiters.append(fut)
-                    log_me("Client: Waiting on Future".format(address, port))
+                    log_me("Client: Waiting on Future {} {}".format(address, port))
                     await fut
-                    log_me("Client: Waiting on Future OVER!!".format(address, port))
+                    log_me("Client: Waiting on Future OVER!! {} {}".format(address, port))
                     continue
 
                 log_me('Client: Send: %r' % send_payload)
@@ -92,7 +93,7 @@ async def update_async_client(address, port, loop):
                     # await asyncio.sleep(1)
 
             if done:
-                log_me("Client: CONVERGENCE achieved in client {}:{}".format(address, port))
+                #log_me("Client: CONVERGENCE achieved in client {}:{}".format(address, port))
                 break
 
         except Exception as ex:
@@ -104,8 +105,6 @@ async def update_async_client(address, port, loop):
 
     log_me('Client : Close socket')
     writer.close()
-    return True
-
 
 async def update_async_server(reader, writer):
     global exit_me
@@ -134,15 +133,13 @@ async def update_async_server(reader, writer):
             log_me('received "%s"' % message)
             result = False
             if data:
-                result = merge_network_state(config_obj, message, network_state)
+                merge_network_state(config_obj, message, network_state)
 
-                if result:
-                    for f in waiters:
-                        log_me("Server: Releasing the Waiter")
-                        f.set_result(True)
-                        waiters.remove(f)
-                else:
-                    log_me("Server: Nothing changed..{}.".format(waiters))
+                for f in waiters:
+                    log_me("Server: Waiting Releasing the Waiter")
+                    f.set_result(True)
+                    waiters.remove(f)
+
             else:
                 log_me('No more data from {}'.format(addr))
 
@@ -218,9 +215,8 @@ def merge_network_state(config_obj, data, network_state):
         network_state_version += 1
         log_me("Network STATE VERSION {}........".format(network_state_version))
 
-    return True
-    # finally:
-    #    mutex.release()
+    return
+
 
 
 def print_final_network(network_state, output_file, total_time):

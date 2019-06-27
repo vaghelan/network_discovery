@@ -11,6 +11,7 @@ import json
 import copy
 from threading import Thread, Lock
 import asyncio
+import netstruct
 
 # global variables
 exit_me = False
@@ -75,7 +76,8 @@ async def update_async_client(address, port, loop):
 
                 log_me('Client: Send: %r' % send_payload)
                 try:
-                    writer.write(send_payload.encode())
+                    send_p = netstruct.pack(b"h$", send_payload.encode())
+                    writer.write(send_p)
                     await writer.drain()
                 except Exception as ex:
                     log_me("Client : Write Failed Error : {} {}:{}".format(ex, address, port))
@@ -92,14 +94,14 @@ async def update_async_client(address, port, loop):
                     log_me("Client: CONVERGENCE achieved in client {}:{}".format(address, port))
                     break
 
-                await asyncio.sleep(0.01)
+                #await asyncio.sleep(0.01)
             if done:
                 break
 
         except Exception as ex:
             log_me("Error = {}".format(ex))
             log_me("Client: Waiting for server {}:{}".format(address, port))
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.01)
 
     log_me('Client : Close socket')
     writer.close()
@@ -117,11 +119,27 @@ async def update_async_server(reader, writer):
     addr = writer.get_extra_info('peername')
     log_me("Server Started for {}".format(addr))
 
+    #obj = netstruct.obj_unpack(b"h$")
+
+    data = b''
+
     while not exit_me:
         try:
 
-            data = await reader.read(1024)
-            message = data.decode()
+            obj = netstruct.obj_unpack(b"h$")
+
+            while obj.feed(data) != 0:
+                data = data + await reader.read(1024)
+
+            message = obj.result[0][:]
+            data = obj.unused_data[:]
+
+            if len(data) > 0:
+                log_me("PARTIAL DATA FOUND {}".format(data))
+            else:
+                log_me("FULL DATA FOUND {}".format(data))
+
+            message = message.decode()
 
             if message == '':
                 break
@@ -130,13 +148,14 @@ async def update_async_server(reader, writer):
 
             log_me('received "%s"' % message)
             result = False
-            if data:
-                merge_network_state(config_obj, message, network_state)
+            if message:
+                result = merge_network_state(config_obj, message, network_state)
 
-                while len(waiters) > 0:
-                    log_me("Server: Force Clients to send new state..{}.".format(addr))
-                    f = waiters.pop(0)
-                    f.set_result(True)
+                if result:
+                    while len(waiters) > 0:
+                        log_me("Server: Force Clients to send new state..{}.".format(addr))
+                        f = waiters.pop(0)
+                        f.set_result(True)
 
             else:
                 log_me('No more data from {}'.format(addr))
@@ -213,7 +232,7 @@ def merge_network_state(config_obj, data, network_state):
         network_state_version += 1
         log_me("Network STATE VERSION {}........".format(network_state_version))
 
-    return
+    return dirty
 
 
 

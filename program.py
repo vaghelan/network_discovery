@@ -101,7 +101,7 @@ async def update_async_client(address, port, loop):
         except Exception as ex:
             log_me("Error = {}".format(ex))
             log_me("Client: Waiting for server {}:{}".format(address, port))
-            await asyncio.sleep(0.01)
+            await asyncio.sleep(0.1)
 
     log_me('Client : Close socket')
     writer.close()
@@ -130,6 +130,7 @@ async def update_async_server(reader, writer):
 
             while obj.feed(data) != 0:
                 data = data + await reader.read(1024)
+                log_me("DATA = {}".format(data))
 
             message = obj.result[0][:]
             data = obj.unused_data[:]

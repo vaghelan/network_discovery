@@ -1,44 +1,46 @@
-21:47:53: Serving on ('127.0.0.1', 5001)
-21:47:53:  addr = 127.0.0.1:5002
-21:47:53: Client : Making connection on 127.0.0.1:5002
-21:47:53: Server Started for ('127.0.0.1', 53922)
-21:47:53: Client: my network state -1
-21:47:53: Client: Send: '{"state": {"A": {"num": 1, "nodes": []}}, "id": "A"}'
-21:47:53: Client: my network state 1
-21:47:53: Client: Waiting on Change in state 127.0.0.1 5002
-21:47:53: FULL DATA FOUND b''
-21:47:53: Server : Received '{"id": "B", "state": {"B": {"num": 1, "nodes": []}}}' from ('127.0.0.1', 53922)
-21:47:53: received "{"id": "B", "state": {"B": {"num": 1, "nodes": []}}}"
-21:47:53: CONVERGENCE NOT achieved........
-21:47:53: Network STATE VERSION 2........
-21:47:53: Server: Force Clients to send new state..('127.0.0.1', 53922).
-21:47:53: Client: Waiting OVER!! 127.0.0.1 5002
-21:47:53: Client: my network state 1
-21:47:53: Client: Send: '{"state": {"B": {"num": 1, "nodes": []}, "A": {"num": 1, "nodes": ["B"]}}, "id": "A"}'
-21:47:53: Client: my network state 2
-21:47:53: Client: Waiting on Change in state 127.0.0.1 5002
-21:47:53: FULL DATA FOUND b''
-21:47:53: Server : Received '{"id": "B", "state": {"B": {"num": 1, "nodes": ["A"]}, "A": {"num": 1, "nodes": []}}}' from ('127.0.0.1', 53922)
-21:47:53: received "{"id": "B", "state": {"B": {"num": 1, "nodes": ["A"]}, "A": {"num": 1, "nodes": []}}}"
-21:47:53: CONVERGENCE ACHIEVED........
-21:47:53: Network STATE VERSION 3........
-21:47:53: Server: Force Clients to send new state..('127.0.0.1', 53922).
-21:47:53: Server : Close socket for a client ('127.0.0.1', 53922)
-21:47:53: Client: Waiting OVER!! 127.0.0.1 5002
-21:47:53: Client: my network state 2
-21:47:53: Client: Send: '{"state": {"B": {"num": 1, "nodes": ["A"]}, "A": {"num": 1, "nodes": ["B"]}}, "id": "A"}'
-21:47:53: Client: CONVERGENCE achieved in client 127.0.0.1:5002
-21:47:53: Client : Close socket
-21:47:53: WAIT COMPLETED>.....
-21:47:53: CONVERGENCE ACHIEVED!!!
-21:47:53: All clients exited !!
-21:47:53: ===================
-21:47:53: A : [ B ] 
+21:58:27: Serving on ('127.0.0.1', 5001)
+21:58:27:  addr = 127.0.0.1:5002
+21:58:27: Client : Making connection on 127.0.0.1:5002
+21:58:27: Server Started for ('127.0.0.1', 54627)
+21:58:27: Client: my network state -1
+21:58:27: Client: Send: '{"id": "A", "state": {"A": {"nodes": [], "num": 1}}}'
+21:58:27: Client: my network state 1
+21:58:27: Client: Waiting on Change in state 127.0.0.1 5002
+21:58:27: DATA = b'\x004{"id": "B", "state": {"B": {"num": 1, "nodes": []}}}'
+21:58:27: FULL DATA FOUND b''
+21:58:27: Server : Received '{"id": "B", "state": {"B": {"num": 1, "nodes": []}}}' from ('127.0.0.1', 54627)
+21:58:27: received "{"id": "B", "state": {"B": {"num": 1, "nodes": []}}}"
+21:58:27: CONVERGENCE NOT achieved........
+21:58:27: Network STATE VERSION 2........
+21:58:27: Server: Force Clients to send new state..('127.0.0.1', 54627).
+21:58:27: Client: Waiting OVER!! 127.0.0.1 5002
+21:58:27: Client: my network state 1
+21:58:27: Client: Send: '{"id": "A", "state": {"B": {"nodes": [], "num": 1}, "A": {"nodes": ["B"], "num": 1}}}'
+21:58:27: Client: my network state 2
+21:58:27: Client: Waiting on Change in state 127.0.0.1 5002
+21:58:27: DATA = b'\x00U{"id": "B", "state": {"A": {"num": 1, "nodes": []}, "B": {"num": 1, "nodes": ["A"]}}}'
+21:58:27: FULL DATA FOUND b''
+21:58:27: Server : Received '{"id": "B", "state": {"A": {"num": 1, "nodes": []}, "B": {"num": 1, "nodes": ["A"]}}}' from ('127.0.0.1', 54627)
+21:58:27: received "{"id": "B", "state": {"A": {"num": 1, "nodes": []}, "B": {"num": 1, "nodes": ["A"]}}}"
+21:58:27: CONVERGENCE ACHIEVED........
+21:58:27: Network STATE VERSION 3........
+21:58:27: Server: Force Clients to send new state..('127.0.0.1', 54627).
+21:58:27: Server : Close socket for a client ('127.0.0.1', 54627)
+21:58:27: Client: Waiting OVER!! 127.0.0.1 5002
+21:58:27: Client: my network state 2
+21:58:27: Client: Send: '{"id": "A", "state": {"B": {"nodes": ["A"], "num": 1}, "A": {"nodes": ["B"], "num": 1}}}'
+21:58:27: Client: CONVERGENCE achieved in client 127.0.0.1:5002
+21:58:27: Client : Close socket
+21:58:27: WAIT COMPLETED>.....
+21:58:27: CONVERGENCE ACHIEVED!!!
+21:58:27: All clients exited !!
+21:58:27: ===================
+21:58:27: A : [ B ] 
 
-21:47:53: B : [ A ] 
+21:58:27: B : [ A ] 
 
-21:47:53: Total time taken for discovery for machine A: 0.01 seconds
+21:58:27: Total time taken for discovery for machine A: 0.0 seconds
 
-21:47:53: ===================
-21:47:53: Program Terminating!!
+21:58:27: ===================
+21:58:27: Program Terminating!!
 [('127.0.0.1', '5002')]

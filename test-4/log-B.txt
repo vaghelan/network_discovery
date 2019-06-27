@@ -1,28 +1,28 @@
-17:22:52: Serving on ('127.0.0.1', 5002)
-17:22:52:  addr = 127.0.0.1:5001
-17:22:52: Client : Making connection on 127.0.0.1:5001
-17:22:52: Client: my network state -1
-17:22:52: Client: Send: '{"id": "B", "state": {"B": {"num": 1, "nodes": []}}}'
-17:22:52: Server Started for ('127.0.0.1', 62029)
-17:22:52: Server : Received '{"id": "A", "state": {"B": {"nodes": [], "num": 1}, "A": {"nodes": ["B"], "num": 1}}}' from ('127.0.0.1', 62029)
-17:22:52: received "{"id": "A", "state": {"B": {"nodes": [], "num": 1}, "A": {"nodes": ["B"], "num": 1}}}"
-17:22:52: CONVERGENCE ACHIEVED........
-17:22:52: Network STATE VERSION 2........
-17:22:52: Server : Close socket for a client ('127.0.0.1', 62029)
-17:22:52: Client: my network state 1
-17:22:52: Client: Send: '{"id": "B", "state": {"A": {"nodes": ["B"], "num": 1}, "B": {"num": 1, "nodes": ["A"]}}}'
-17:22:52: Client: CONVERGENCE achieved in client 127.0.0.1:5001
-17:22:52: Client : Close socket
-17:22:52: WAIT COMPLETED>.....
-17:22:52: CONVERGENCE ACHIEVED!!!
-17:22:52: All clients exited !!
-17:22:52: ===================
-17:22:52: A : [ B ] 
+18:01:50: Serving on ('127.0.0.1', 5002)
+18:01:50:  addr = 127.0.0.1:5001
+18:01:50: Client : Making connection on 127.0.0.1:5001
+18:01:50: Client: my network state -1
+18:01:50: Client: Send: '{"state": {"B": {"nodes": [], "num": 1}}, "id": "B"}'
+18:01:50: Server Started for ('127.0.0.1', 63600)
+18:01:50: Server : Received '{"id": "A", "state": {"B": {"num": 1, "nodes": []}, "A": {"num": 1, "nodes": ["B"]}}}' from ('127.0.0.1', 63600)
+18:01:50: received "{"id": "A", "state": {"B": {"num": 1, "nodes": []}, "A": {"num": 1, "nodes": ["B"]}}}"
+18:01:50: CONVERGENCE ACHIEVED........
+18:01:50: Network STATE VERSION 2........
+18:01:50: Server : Close socket for a client ('127.0.0.1', 63600)
+18:01:50: Client: my network state 1
+18:01:50: Client: Send: '{"state": {"A": {"nodes": ["B"], "num": 1}, "B": {"nodes": ["A"], "num": 1}}, "id": "B"}'
+18:01:50: Client: CONVERGENCE achieved in client 127.0.0.1:5001
+18:01:50: Client : Close socket
+18:01:50: WAIT COMPLETED>.....
+18:01:50: CONVERGENCE ACHIEVED!!!
+18:01:50: All clients exited !!
+18:01:50: ===================
+18:01:50: A : [ B ] 
 
-17:22:52: B : [ A ] 
+18:01:50: B : [ A ] 
 
-17:22:52: Total time taken for discovery: 0.01317596435546875 seconds
+18:01:50: Total time taken for discovery for machine B: 0.02 seconds
 
-17:22:52: ===================
-17:22:52: Program Terminating!!
+18:01:50: ===================
+18:01:50: Program Terminating!!
 [('127.0.0.1', '5001')]

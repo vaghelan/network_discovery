@@ -220,14 +220,19 @@ def merge_network_state(config_obj, data, network_state):
 def print_final_network(network_state, output_file, total_time):
     log_me("===================")
     o = open(output_file, "w")
-    for node in network_state["state"]:
+    nodes = list(network_state["state"].keys())
+    nodes.sort()
+
+    s = "There are {} machines in this topology. The following are the machines and their neighbors discovered from machine {}:\n".format(len(nodes), network_state['id'])
+    o.write(s)
+    for node in nodes:
         network_state["state"][node]["nodes"].sort()
         s = "{} : [ {} ] \n".format(node, ", ".join(network_state["state"][node]["nodes"]))
         o.write(s)
         log_me(s)
-    s = "Total time taken for discovery: {} seconds\n".format(total_time)
-    log_me(s)
+    s = "Total time taken for discovery for machine {}: {} seconds\n".format(network_state["id"], round(total_time, 2))
     o.write(s)
+    log_me(s)
     log_me("===================")
     o.close()
 

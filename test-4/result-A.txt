@@ -1,3 +1,4 @@
-B : [ A ] 
+There are 2 machines in this topology. The following are the machines and their neighbors discovered from machine A:
 A : [ B ] 
-Total time taken for discovery: 0.013116121292114258 seconds
+B : [ A ] 
+Total time taken for discovery for machine A: 0.02 seconds

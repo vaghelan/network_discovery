@@ -3,4 +3,4 @@ A : [ B, D ]
 B : [ A, C ] 
 C : [ B, D ] 
 D : [ A, C ] 
-Total time taken for discovery for machine B: 0.12 seconds
+Total time taken for discovery for machine B: 0.01 seconds

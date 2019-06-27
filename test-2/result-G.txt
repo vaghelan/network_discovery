@@ -6,4 +6,4 @@ D : [ A, E ]
 E : [ B, C, D, F ] 
 F : [ E, G ] 
 G : [ F ] 
-Total time taken for discovery for machine G: 0.05 seconds
+Total time taken for discovery for machine G: 0.04 seconds

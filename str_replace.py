@@ -53,12 +53,16 @@ def replace_string(s, words):
 
     return new_string
 
+test_case_num = 1
 
 def test_me(s, words):
-    print ("=============")
-    print (s)
-    print (replace_string(s, words))
-    print("=============")
+    global  test_case_num
+    print ("======test case {}=======".format(test_case_num))
+    print ("words = " , words)
+    print ("original = \"", s  , "\"")
+    print ("new      = \"", replace_string(s, words), "\"")
+    print("======test case {}=======\n\n".format(test_case_num))
+    test_case_num += 1
 
 
 def test_all(words):

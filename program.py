@@ -87,7 +87,7 @@ async def update_async_client(address, port, loop):
                     pass
 
                 my_network_state_version = network_state_version
-                
+
                 if done:
                     log_me("Client: CONVERGENCE achieved in client {}:{}".format(address, port))
                     break
@@ -259,7 +259,8 @@ for i in config_obj.get_neighbors():
     log_me(" addr = {}:{}".format(addr, port))
     futures.append(update_async_client(addr, port, loop))
 
-loop.run_until_complete(asyncio.gather(asyncio.wait(futures)))
+if len(futures) > 0:
+    loop.run_until_complete(asyncio.gather(asyncio.wait(futures)))
 
 log_me("WAIT COMPLETED>.....")
 

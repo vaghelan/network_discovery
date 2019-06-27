@@ -7,7 +7,10 @@ class config_read():
         with open(config_file) as json_file:
             self.data = json.load(json_file)
 
-        host_port_pairs = (self.data['config']['neighbors']).split(",")
+        host_port_pairs = []
+
+        if self.data['config']['neighbors'] != '':
+            host_port_pairs = (self.data['config']['neighbors']).split(",")
 
         self.neighbors = []
         for hp in host_port_pairs:

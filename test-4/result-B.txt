@@ -1,0 +1,3 @@
+A : [ B ] 
+B : [ A ] 
+Total time taken for discovery: 0.01317596435546875 seconds

@@ -1,132 +1,148 @@
-20:43:31: Serving on ('127.0.0.1', 5004)
-20:43:31:  addr = 127.0.0.1:5001
-20:43:31:  addr = 127.0.0.1:5003
-20:43:31: Client : Making connection on 127.0.0.1:5001
-20:43:31: Client : Making connection on 127.0.0.1:5003
-20:43:31: Client: my network state -1
-20:43:31: Client: Send: '{"id": "D", "state": {"D": {"num": 2, "nodes": []}}}'
-20:43:31: Client: my network state 1
-20:43:31: Client: Waiting on Change in state 127.0.0.1 5001
-20:43:31: Server Started for ('127.0.0.1', 53579)
-20:43:31: Client: my network state -1
-20:43:31: Client: Send: '{"id": "D", "state": {"D": {"num": 2, "nodes": []}}}'
-20:43:31: Client: my network state 1
-20:43:31: Client: Waiting on Change in state 127.0.0.1 5003
-20:43:31: Server Started for ('127.0.0.1', 53582)
-20:43:31: FULL DATA FOUND b''
-20:43:31: Server : Received '{"id": "C", "state": {"C": {"nodes": [], "num": 2}}}' from ('127.0.0.1', 53579)
-20:43:31: received "{"id": "C", "state": {"C": {"nodes": [], "num": 2}}}"
-20:43:31: CONVERGENCE NOT achieved........
-20:43:31: Network STATE VERSION 2........
-20:43:31: Server: Force Clients to send new state..('127.0.0.1', 53579).
-20:43:31: Server: Force Clients to send new state..('127.0.0.1', 53579).
-20:43:31: Client: Waiting OVER!! 127.0.0.1 5001
-20:43:31: Client: my network state 1
-20:43:31: Client: Send: '{"id": "D", "state": {"C": {"num": 2, "nodes": []}, "D": {"num": 2, "nodes": ["C"]}}}'
-20:43:31: Client: my network state 2
-20:43:31: Client: Waiting on Change in state 127.0.0.1 5001
-20:43:31: Client: Waiting OVER!! 127.0.0.1 5003
-20:43:31: Client: my network state 1
-20:43:31: Client: Send: '{"id": "D", "state": {"C": {"num": 2, "nodes": []}, "D": {"num": 2, "nodes": ["C"]}}}'
-20:43:31: Client: my network state 2
-20:43:31: Client: Waiting on Change in state 127.0.0.1 5003
-20:43:31: FULL DATA FOUND b''
-20:43:31: Server : Received '{"state": {"A": {"nodes": [], "num": 2}}, "id": "A"}' from ('127.0.0.1', 53582)
-20:43:31: received "{"state": {"A": {"nodes": [], "num": 2}}, "id": "A"}"
-20:43:31: CONVERGENCE NOT achieved........
-20:43:31: Network STATE VERSION 3........
-20:43:31: Server: Force Clients to send new state..('127.0.0.1', 53582).
-20:43:31: Server: Force Clients to send new state..('127.0.0.1', 53582).
-20:43:31: Client: Waiting OVER!! 127.0.0.1 5001
-20:43:31: Client: my network state 2
-20:43:31: Client: Send: '{"id": "D", "state": {"C": {"num": 2, "nodes": []}, "A": {"num": 2, "nodes": []}, "D": {"num": 2, "nodes": ["C", "A"]}}}'
-20:43:31: Client: my network state 3
-20:43:31: Client: Waiting on Change in state 127.0.0.1 5001
-20:43:31: Client: Waiting OVER!! 127.0.0.1 5003
-20:43:31: Client: my network state 2
-20:43:31: Client: Send: '{"id": "D", "state": {"C": {"num": 2, "nodes": []}, "A": {"num": 2, "nodes": []}, "D": {"num": 2, "nodes": ["C", "A"]}}}'
-20:43:31: Client: my network state 3
-20:43:31: Client: Waiting on Change in state 127.0.0.1 5003
-20:43:31: FULL DATA FOUND b''
-20:43:31: Server : Received '{"id": "C", "state": {"B": {"nodes": [], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": [], "num": 2}}}' from ('127.0.0.1', 53579)
-20:43:31: received "{"id": "C", "state": {"B": {"nodes": [], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": [], "num": 2}}}"
-20:43:31: CONVERGENCE NOT achieved........
-20:43:31: Network STATE VERSION 4........
-20:43:31: Server: Force Clients to send new state..('127.0.0.1', 53579).
-20:43:31: Server: Force Clients to send new state..('127.0.0.1', 53579).
-20:43:31: Client: Waiting OVER!! 127.0.0.1 5001
-20:43:31: Client: my network state 3
-20:43:31: Client: Send: '{"id": "D", "state": {"C": {"num": 2, "nodes": ["D", "B"]}, "A": {"num": 2, "nodes": []}, "D": {"num": 2, "nodes": ["C", "A"]}, "B": {"num": 2, "nodes": []}}}'
-20:43:31: Client: my network state 4
-20:43:31: Client: Waiting on Change in state 127.0.0.1 5001
-20:43:31: Client: Waiting OVER!! 127.0.0.1 5003
-20:43:31: Client: my network state 3
-20:43:31: Client: Send: '{"id": "D", "state": {"C": {"num": 2, "nodes": ["D", "B"]}, "A": {"num": 2, "nodes": []}, "D": {"num": 2, "nodes": ["C", "A"]}, "B": {"num": 2, "nodes": []}}}'
-20:43:31: Client: my network state 4
-20:43:31: Client: Waiting on Change in state 127.0.0.1 5003
-20:43:31: PARTIAL DATA FOUND b'\x00~{"id": "C", "state": {"B": {"nodes": ["C"], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["C"], "num": 2}}}'
-20:43:31: Server : Received '{"id": "C", "state": {"B": {"nodes": [], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["C"], "num": 2}}}' from ('127.0.0.1', 53579)
-20:43:31: received "{"id": "C", "state": {"B": {"nodes": [], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["C"], "num": 2}}}"
-20:43:31: CONVERGENCE NOT achieved........
-20:43:31: FULL DATA FOUND b''
-20:43:31: Server : Received '{"id": "C", "state": {"B": {"nodes": ["C"], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["C"], "num": 2}}}' from ('127.0.0.1', 53579)
-20:43:31: received "{"id": "C", "state": {"B": {"nodes": ["C"], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["C"], "num": 2}}}"
-20:43:31: CONVERGENCE NOT achieved........
-20:43:31: Network STATE VERSION 5........
-20:43:31: Server: Force Clients to send new state..('127.0.0.1', 53579).
-20:43:31: Server: Force Clients to send new state..('127.0.0.1', 53579).
-20:43:31: FULL DATA FOUND b''
-20:43:31: Server : Received '{"state": {"A": {"nodes": ["B", "D"], "num": 2}, "B": {"nodes": [], "num": 2}, "D": {"nodes": [], "num": 2}}, "id": "A"}' from ('127.0.0.1', 53582)
-20:43:31: received "{"state": {"A": {"nodes": ["B", "D"], "num": 2}, "B": {"nodes": [], "num": 2}, "D": {"nodes": [], "num": 2}}, "id": "A"}"
-20:43:31: CONVERGENCE NOT achieved........
-20:43:31: Network STATE VERSION 6........
-20:43:31: Client: Waiting OVER!! 127.0.0.1 5001
-20:43:31: Client: my network state 4
-20:43:31: Client: Send: '{"id": "D", "state": {"C": {"num": 2, "nodes": ["D", "B"]}, "A": {"num": 2, "nodes": ["B", "D"]}, "D": {"num": 2, "nodes": ["C", "A"]}, "B": {"num": 2, "nodes": ["C"]}}}'
-20:43:31: Client: my network state 6
-20:43:31: Client: Waiting on Change in state 127.0.0.1 5001
-20:43:31: Client: Waiting OVER!! 127.0.0.1 5003
-20:43:31: Client: my network state 4
-20:43:31: Client: Send: '{"id": "D", "state": {"C": {"num": 2, "nodes": ["D", "B"]}, "A": {"num": 2, "nodes": ["B", "D"]}, "D": {"num": 2, "nodes": ["C", "A"]}, "B": {"num": 2, "nodes": ["C"]}}}'
-20:43:31: Client: my network state 6
-20:43:31: Client: Waiting on Change in state 127.0.0.1 5003
-20:43:31: FULL DATA FOUND b''
-20:43:31: Server : Received '{"id": "C", "state": {"A": {"nodes": [], "num": 2}, "B": {"nodes": ["C", "A"], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["C", "A"], "num": 2}}}' from ('127.0.0.1', 53579)
-20:43:31: received "{"id": "C", "state": {"A": {"nodes": [], "num": 2}, "B": {"nodes": ["C", "A"], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["C", "A"], "num": 2}}}"
-20:43:31: CONVERGENCE ACHIEVED........
-20:43:31: Network STATE VERSION 7........
-20:43:31: Server: Force Clients to send new state..('127.0.0.1', 53579).
-20:43:31: Server: Force Clients to send new state..('127.0.0.1', 53579).
-20:43:31: Server : Close socket for a client ('127.0.0.1', 53579)
-20:43:31: Client: Waiting OVER!! 127.0.0.1 5001
-20:43:31: Client: my network state 6
-20:43:31: Client: Send: '{"id": "D", "state": {"C": {"num": 2, "nodes": ["D", "B"]}, "A": {"num": 2, "nodes": ["B", "D"]}, "D": {"num": 2, "nodes": ["C", "A"]}, "B": {"num": 2, "nodes": ["C", "A"]}}}'
-20:43:31: Client: CONVERGENCE achieved in client 127.0.0.1:5001
-20:43:31: Client : Close socket
-20:43:31: Client: Waiting OVER!! 127.0.0.1 5003
-20:43:31: Client: my network state 6
-20:43:31: Client: Send: '{"id": "D", "state": {"C": {"num": 2, "nodes": ["D", "B"]}, "A": {"num": 2, "nodes": ["B", "D"]}, "D": {"num": 2, "nodes": ["C", "A"]}, "B": {"num": 2, "nodes": ["C", "A"]}}}'
-20:43:31: Client: CONVERGENCE achieved in client 127.0.0.1:5003
-20:43:31: Client : Close socket
-20:43:31: FULL DATA FOUND b''
-20:43:31: Server : Received '{"state": {"C": {"nodes": [], "num": 2}, "A": {"nodes": ["B", "D"], "num": 2}, "B": {"nodes": ["C", "A"], "num": 2}, "D": {"nodes": ["C", "A"], "num": 2}}, "id": "A"}' from ('127.0.0.1', 53582)
-20:43:31: received "{"state": {"C": {"nodes": [], "num": 2}, "A": {"nodes": ["B", "D"], "num": 2}, "B": {"nodes": ["C", "A"], "num": 2}, "D": {"nodes": ["C", "A"], "num": 2}}, "id": "A"}"
-20:43:31: CONVERGENCE ACHIEVED........
-20:43:31: Server : Close socket for a client ('127.0.0.1', 53582)
-20:43:31: WAIT COMPLETED>.....
-20:43:31: CONVERGENCE ACHIEVED!!!
-20:43:31: All clients exited !!
-20:43:31: ===================
-20:43:31: A : [ B, D ] 
+21:47:57: Serving on ('127.0.0.1', 5004)
+21:47:57:  addr = 127.0.0.1:5001
+21:47:57:  addr = 127.0.0.1:5003
+21:47:57: Client : Making connection on 127.0.0.1:5001
+21:47:57: Client : Making connection on 127.0.0.1:5003
+21:47:57: Client: my network state -1
+21:47:57: Client: Send: '{"state": {"D": {"nodes": [], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 1
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5001
+21:47:57: Client: my network state -1
+21:47:57: Client: Send: '{"state": {"D": {"nodes": [], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 1
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5003
+21:47:57: Server Started for ('127.0.0.1', 53978)
+21:47:57: Server Started for ('127.0.0.1', 53980)
+21:47:57: FULL DATA FOUND b''
+21:47:57: Server : Received '{"id": "A", "state": {"A": {"num": 2, "nodes": []}}}' from ('127.0.0.1', 53978)
+21:47:57: received "{"id": "A", "state": {"A": {"num": 2, "nodes": []}}}"
+21:47:57: CONVERGENCE NOT achieved........
+21:47:57: Network STATE VERSION 2........
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53978).
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53978).
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5001
+21:47:57: Client: my network state 1
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": []}, "D": {"nodes": ["A"], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 2
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5001
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5003
+21:47:57: Client: my network state 1
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": []}, "D": {"nodes": ["A"], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 2
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5003
+21:47:57: FULL DATA FOUND b''
+21:47:57: Server : Received '{"id": "A", "state": {"A": {"num": 2, "nodes": ["D"]}, "D": {"num": 2, "nodes": []}}}' from ('127.0.0.1', 53978)
+21:47:57: received "{"id": "A", "state": {"A": {"num": 2, "nodes": ["D"]}, "D": {"num": 2, "nodes": []}}}"
+21:47:57: CONVERGENCE NOT achieved........
+21:47:57: Network STATE VERSION 3........
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53978).
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53978).
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5001
+21:47:57: Client: my network state 2
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": ["D"]}, "D": {"nodes": ["A"], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 3
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5001
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5003
+21:47:57: Client: my network state 2
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": ["D"]}, "D": {"nodes": ["A"], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 3
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5003
+21:47:57: FULL DATA FOUND b''
+21:47:57: Server : Received '{"state": {"D": {"nodes": [], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "B": {"nodes": [], "num": 2}}, "id": "C"}' from ('127.0.0.1', 53980)
+21:47:57: received "{"state": {"D": {"nodes": [], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "B": {"nodes": [], "num": 2}}, "id": "C"}"
+21:47:57: CONVERGENCE NOT achieved........
+21:47:57: Network STATE VERSION 4........
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53980).
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53980).
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5001
+21:47:57: Client: my network state 3
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": ["D"]}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["A", "C"], "num": 2}, "B": {"nodes": [], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 4
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5001
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5003
+21:47:57: Client: my network state 3
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": ["D"]}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["A", "C"], "num": 2}, "B": {"nodes": [], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 4
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5003
+21:47:57: FULL DATA FOUND b''
+21:47:57: Server : Received '{"id": "A", "state": {"A": {"num": 2, "nodes": ["D", "B"]}, "B": {"num": 2, "nodes": []}, "D": {"num": 2, "nodes": []}}}' from ('127.0.0.1', 53978)
+21:47:57: received "{"id": "A", "state": {"A": {"num": 2, "nodes": ["D", "B"]}, "B": {"num": 2, "nodes": []}, "D": {"num": 2, "nodes": []}}}"
+21:47:57: CONVERGENCE NOT achieved........
+21:47:57: Network STATE VERSION 5........
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53978).
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53978).
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5001
+21:47:57: Client: my network state 4
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": ["D", "B"]}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["A", "C"], "num": 2}, "B": {"nodes": [], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 5
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5001
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5003
+21:47:57: Client: my network state 4
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": ["D", "B"]}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["A", "C"], "num": 2}, "B": {"nodes": [], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 5
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5003
+21:47:57: FULL DATA FOUND b''
+21:47:57: Server : Received '{"state": {"D": {"nodes": [], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "A": {"nodes": [], "num": 2}, "B": {"nodes": ["A"], "num": 2}}, "id": "C"}' from ('127.0.0.1', 53980)
+21:47:57: received "{"state": {"D": {"nodes": [], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "A": {"nodes": [], "num": 2}, "B": {"nodes": ["A"], "num": 2}}, "id": "C"}"
+21:47:57: CONVERGENCE NOT achieved........
+21:47:57: Network STATE VERSION 6........
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53980).
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53980).
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5001
+21:47:57: Client: my network state 5
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": ["D", "B"]}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["A", "C"], "num": 2}, "B": {"nodes": ["A"], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 6
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5001
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5003
+21:47:57: Client: my network state 5
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": ["D", "B"]}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["A", "C"], "num": 2}, "B": {"nodes": ["A"], "num": 2}}, "id": "D"}'
+21:47:57: Client: my network state 6
+21:47:57: Client: Waiting on Change in state 127.0.0.1 5003
+21:47:57: FULL DATA FOUND b''
+21:47:57: Server : Received '{"state": {"D": {"nodes": ["A"], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "A": {"nodes": ["D"], "num": 2}, "B": {"nodes": ["A"], "num": 2}}, "id": "C"}' from ('127.0.0.1', 53980)
+21:47:57: received "{"state": {"D": {"nodes": ["A"], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "A": {"nodes": ["D"], "num": 2}, "B": {"nodes": ["A"], "num": 2}}, "id": "C"}"
+21:47:57: CONVERGENCE NOT achieved........
+21:47:57: FULL DATA FOUND b''
+21:47:57: Server : Received '{"id": "A", "state": {"A": {"num": 2, "nodes": ["D", "B"]}, "B": {"num": 2, "nodes": ["A"]}, "D": {"num": 2, "nodes": ["A"]}}}' from ('127.0.0.1', 53978)
+21:47:57: received "{"id": "A", "state": {"A": {"num": 2, "nodes": ["D", "B"]}, "B": {"num": 2, "nodes": ["A"]}, "D": {"num": 2, "nodes": ["A"]}}}"
+21:47:57: CONVERGENCE NOT achieved........
+21:47:57: FULL DATA FOUND b''
+21:47:57: Server : Received '{"state": {"D": {"nodes": ["A", "C"], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "A": {"nodes": ["D"], "num": 2}, "B": {"nodes": ["A", "C"], "num": 2}}, "id": "C"}' from ('127.0.0.1', 53980)
+21:47:57: received "{"state": {"D": {"nodes": ["A", "C"], "num": 2}, "C": {"nodes": ["D", "B"], "num": 2}, "A": {"nodes": ["D"], "num": 2}, "B": {"nodes": ["A", "C"], "num": 2}}, "id": "C"}"
+21:47:57: CONVERGENCE ACHIEVED........
+21:47:57: Network STATE VERSION 7........
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53980).
+21:47:57: Server: Force Clients to send new state..('127.0.0.1', 53980).
+21:47:57: Server : Close socket for a client ('127.0.0.1', 53980)
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5001
+21:47:57: Client: my network state 6
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": ["D", "B"]}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["A", "C"], "num": 2}, "B": {"nodes": ["A", "C"], "num": 2}}, "id": "D"}'
+21:47:57: Client: CONVERGENCE achieved in client 127.0.0.1:5001
+21:47:57: Client : Close socket
+21:47:57: Client: Waiting OVER!! 127.0.0.1 5003
+21:47:57: Client: my network state 6
+21:47:57: Client: Send: '{"state": {"A": {"num": 2, "nodes": ["D", "B"]}, "C": {"nodes": ["D", "B"], "num": 2}, "D": {"nodes": ["A", "C"], "num": 2}, "B": {"nodes": ["A", "C"], "num": 2}}, "id": "D"}'
+21:47:57: Client: CONVERGENCE achieved in client 127.0.0.1:5003
+21:47:57: Client : Close socket
+21:47:57: FULL DATA FOUND b''
+21:47:57: Server : Received '{"id": "A", "state": {"A": {"num": 2, "nodes": ["D", "B"]}, "B": {"num": 2, "nodes": ["A", "C"]}, "D": {"num": 2, "nodes": ["A", "C"]}, "C": {"num": 2, "nodes": ["D", "B"]}}}' from ('127.0.0.1', 53978)
+21:47:57: received "{"id": "A", "state": {"A": {"num": 2, "nodes": ["D", "B"]}, "B": {"num": 2, "nodes": ["A", "C"]}, "D": {"num": 2, "nodes": ["A", "C"]}, "C": {"num": 2, "nodes": ["D", "B"]}}}"
+21:47:57: CONVERGENCE ACHIEVED........
+21:47:57: Server : Close socket for a client ('127.0.0.1', 53978)
+21:47:57: WAIT COMPLETED>.....
+21:47:57: CONVERGENCE ACHIEVED!!!
+21:47:57: All clients exited !!
+21:47:57: ===================
+21:47:57: A : [ B, D ] 
 
-20:43:31: B : [ A, C ] 
+21:47:57: B : [ A, C ] 
 
-20:43:31: C : [ B, D ] 
+21:47:57: C : [ B, D ] 
 
-20:43:31: D : [ A, C ] 
+21:47:57: D : [ A, C ] 
 
-20:43:31: Total time taken for discovery for machine D: 0.01 seconds
+21:47:57: Total time taken for discovery for machine D: 0.01 seconds
 
-20:43:31: ===================
-20:43:31: Program Terminating!!
+21:47:57: ===================
+21:47:57: Program Terminating!!
 [('127.0.0.1', '5001'), ('127.0.0.1', '5003')]

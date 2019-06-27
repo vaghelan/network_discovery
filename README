@@ -48,3 +48,13 @@ A:
     E:  [ D ] , 1
 
   }
+
+
+ To Test individual Test Case :
+
+ cd test-1
+ ./launch.sh
+
+
+ To Test all test cases :
+ ./launch_all.sh
